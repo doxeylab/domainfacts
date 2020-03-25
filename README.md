@@ -2,7 +2,7 @@
 Statistical detection of lineage, environment, and pathogen-association protein domain families
 
 DomainFacts is a database of pre-computed analyses of Pfam domain families. The abundance of all 17,929 families in Pfam v. 32.0 was examined in:
-* Bioinformatic databases
+* NCBI (through Pfam's databases)
 * Environments (human gut, marine, soil)
 * Taxonomic lineages
 * Pathogens vs non-pathogens
