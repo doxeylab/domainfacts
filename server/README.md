@@ -22,7 +22,7 @@ The included configuration file is merely a template: you must change the `$USER
 
 The included configuration file will need to be edited. Currently, it points to our `domainstats.uwaterloo.ca` domain.
 
-## `SSL`
+## SSL
 
 Run the following command: `sudo certbot --nginx`. This will walk you through creating certificates for your domain. To renew the certificate, run `sudo certbot renew`.
 
