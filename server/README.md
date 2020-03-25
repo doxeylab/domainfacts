@@ -12,7 +12,7 @@ First install the following programs:
 
 ## Configuration
 
-There are two sample configuration files included in this directory: one for `shiny-server`, and one for `nginx`. The `shiny-server.conf` file (on Ubuntu) should be copied to `/etc/shiny-server/shiny-server.conf`, and the `nginx.conf` file to `/etc/nginx/sites-available/default`. Before copying these over however, first edit these as discussed below.
+There are two sample configuration files included in the `conf` directory: one for `shiny-server`, and one for `nginx`. The `shiny-server.conf` file (on Ubuntu) should be copied to `/etc/shiny-server/shiny-server.conf`, and the `nginx.conf` file to `/etc/nginx/sites-available/default`. Before copying these over however, first edit these as discussed below.
 
 ### `shiny-server`
 
