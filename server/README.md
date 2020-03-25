@@ -10,7 +10,7 @@ This app was designed for R version 3.6.3 or later. The following CRAN R package
 
 `shiny`, `DT`, `shinythemes`, `shinyWidgets`, `plotly`, `shinycssloaders`, `fst`, `readr`, `htmltools`
 
-The data files needed to run the app can downloaded here: LINK
+The data files needed to run the app can downloaded here: LINK. Place them in the `app/data/` directory.
 
 ### Server
 
