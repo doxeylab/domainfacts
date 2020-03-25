@@ -1,8 +1,18 @@
-# `shiny-server` Open Source Edition Setup
+# Shiny App Setupt
 
 These instructions were written with Ubuntu 16.04.6 LTS in mind. Follow these instructions to host the `DomainStats` app on a server with SSL support.
 
 ## Requirements
+
+### App
+
+This app was designed for R version 3.6.3 or later. The following CRAN R packages are used:
+
+`shiny`, `DT`, `shinythemes`, `shinyWidgets`, `plotly`, `shinycssloaders`, `fst`, `readr`, `htmltools`
+
+The data files needed to run the app can downloaded here: LINK
+
+### Server
 
 First install the following programs:
 
@@ -34,3 +44,7 @@ Run the following commands to load the new configuration files:
 sudo systemctl restart nginx
 sudo systemctl restart shiny-server
 ```
+
+## Running the locally
+
+From within the `app` directory, launch the app from R: `shiny::runApp()`
