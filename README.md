@@ -16,7 +16,7 @@ Additionally, all Pfam families were analyzed to predict:
 An interactive database for exploring our predictions is available at: https://domainfacts.uwaterloo.ca/
 
 ## Analyses and source code
-* All analysis scripts are available in /scripts/
+* Analysis scripts are available in /scripts/
 * Source code for the RShinyApp web-server is available in /server/
 
 ## Authors
