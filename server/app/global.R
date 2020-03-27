@@ -1,7 +1,7 @@
 #-------------------------------------------------------------------------------
 # DomainFacts v1.0
 # global.R
-# Last modified: 2020-03-27 15:55:55 (CET)
+# Last modified: 2020-03-27 15:58:08 (CET)
 # BJM Tremblay
 
 msg <- function(...) {
@@ -617,14 +617,14 @@ make_domain_stats_tab <- function() {
       column(1),
       column(5,
         wellPanel(
-          tags$h3("Environmental association"),
-          plotlyOutput("ENVIRONMENT_PLOT")
+          tags$h3("Pathogen association"),
+          plotlyOutput("PATHOGEN_PLOT")
         )
       ),
       column(5,
         wellPanel(
-          tags$h3("Pathogen association"),
-          plotlyOutput("PATHOGEN_PLOT")
+          tags$h3("Environmental association"),
+          plotlyOutput("ENVIRONMENT_PLOT")
         )
       ),
       column(1)
