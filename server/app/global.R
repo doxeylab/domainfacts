@@ -1,7 +1,7 @@
 #-------------------------------------------------------------------------------
 # DomainFacts v1.0
 # global.R
-# Last modified: 2020-03-27 15:58:08 (CET)
+# Last modified: 2020-03-27 16:29:04 (CET)
 # BJM Tremblay
 
 msg <- function(...) {
@@ -560,7 +560,8 @@ make_pathogen_plot <- function(x) {
     layout(
       barmode = "group",
       xaxis = list(title = ""),
-      yaxis = list(range = c(0, 101), title = "Percent of proteomes")
+      # yaxis = list(range = c(0, 101), title = "Percent of proteomes")
+      yaxis = list(title = "Percent of proteomes")
     )
 }
 
