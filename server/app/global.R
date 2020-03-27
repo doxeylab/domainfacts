@@ -1,7 +1,7 @@
 #-------------------------------------------------------------------------------
 # DomainFacts v1.0
 # global.R
-# Last modified: 2020-03-25 20:56:06 (CET)
+# Last modified: 2020-03-27 15:55:55 (CET)
 # BJM Tremblay
 
 msg <- function(...) {
@@ -186,7 +186,7 @@ filter_table <- function(x, hideDUFs = FALSE, hideNonDUFs = TRUE, returnAll = FA
       filter_duf(out, hideDUFs, hideNonDUFs)
     },
     BUTTON_BROAD_PATHOGEN = {
-      out <- DATA_ALL[, c("A", "C", "D", "Z", "X", "W", "AE")]
+      out <- DATA_ALL[, c("A", "C", "D", "AF", "Z", "X", "W", "AE")]
       if (returnAll) out <- cbind(out, DATA_ALL[, !colnames(DATA_ALL) %in% out])
       out <- out[order(out$Z), ]
       out <- out[!is.na(out$Z) & !is.na(out$W) & !is.na(out$X) & !is.na(out$AE), ]
@@ -271,6 +271,7 @@ make_col_container <- function(x) {
           th("Domain"),
           th("Type of PFAM entry"),
           th("DUF status"),
+          th("Fold change", title = "Fold change of the domain in pathogen bacterial Pfam taxa ids (proteomes) over non-pathogen bacterial Pfam taxa ids (proteomes)"),
           th("Precision of taxa w/ highest F1", title = "Precision of the taxa with the highest F1 score (only compared to the most common taxa for each domain at each taxonomic level)"),
           th("Taxon w/ highest F1", title = "Taxa with highest F1 score (only compared to the most common taxa for each domain at each taxonomic level)"),
           th("Taxonomic level", title = "Taxonomic level with highest F1 score"),
