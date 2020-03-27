@@ -1,7 +1,7 @@
 #-------------------------------------------------------------------------------
 # DomainFacts v1.0
 # global.R
-# Last modified: 2020-03-27 16:29:04 (CET)
+# Last modified: 2020-03-27 20:19:47 (CET)
 # BJM Tremblay
 
 msg <- function(...) {
@@ -528,6 +528,8 @@ make_pathogen_plot <- function(x) {
   dpnp <- (mean(DATA_ALL$AD[DATA_ALL$D == "DUF"], na.rm = TRUE) / 7897) * 100
   ndpp <- (mean(DATA_ALL$AC[DATA_ALL$D == "non-DUF"], na.rm = TRUE) / 354) * 100
   ndpnp <- (mean(DATA_ALL$AD[DATA_ALL$D == "non-DUF"], na.rm = TRUE) / 7897) * 100
+  fold_change <- DATA_ALL[x, "AF"]
+  q_val <- DATA_ALL[x, "AE"]
   if (is.na(pp)) pp <- 0
   if (is.na(pnp)) pnp <- 0
   d <- data.frame(
@@ -558,6 +560,14 @@ make_pathogen_plot <- function(x) {
       name = x
     ) %>%
     layout(
+      title = list(
+        text = paste(
+          "Fold change = ", fold_change,
+          "\nPathogen enrichment Q-value = ", q_val
+        ),
+        font = list(size = 12)
+      ),
+      margin = list(t = 60),
       barmode = "group",
       xaxis = list(title = ""),
       # yaxis = list(range = c(0, 101), title = "Percent of proteomes")
