@@ -1,7 +1,7 @@
 #-------------------------------------------------------------------------------
 # DomainFacts v1.0
 # global.R
-# Last modified: 2020-03-27 20:19:47 (CET)
+# Last modified: 2020-03-27 20:32:25 (CET)
 # BJM Tremblay
 
 msg <- function(...) {
@@ -484,6 +484,17 @@ make_lineage_plot <- function(x) {
     p %>% add_segments(x = xline, xend = xline, y = 0, yend = 700, name = x)
 }
 
+find_right_col <- function(whichcol, x_name) {
+  x_name_nchar <- nchar(x_name)
+  oth <- colnames(FREQ_DAT)[whichcol]
+  oth_nchar <- nchar(oth)
+  out <- whichcol[oth_nchar == x_name_nchar]
+  if (!length(out)) {
+    out <- whichcol[oth_nchar == x_name_nchar + 1]
+  }
+  out
+}
+
 make_environment_plot <- function(x) {
   x_name <- DATA_ALL[x, "A"]
   if (x_name %in% colnames(FREQ_DAT)) {
@@ -496,6 +507,7 @@ make_environment_plot <- function(x) {
     )
   }
   if (!length(whichcol)) return(NULL)
+  if (length(whichcol) > 1) whichcol <- find_right_col(whichcol, x_name)
   p_HumanGut <- FREQ_DAT[[whichcol]][FREQ_DAT$Env == "HumanGut"]
   p_Marine <- FREQ_DAT[[whichcol]][FREQ_DAT$Env == "Marine"]
   p_Soil <- FREQ_DAT[[whichcol]][FREQ_DAT$Env == "Soil"]
