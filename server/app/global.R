@@ -1,7 +1,7 @@
 #-------------------------------------------------------------------------------
 # DomainFacts v1.0
 # global.R
-# Last modified: 2020-03-28 17:28:35 (CET)
+# Last modified: 2020-03-28 19:36:57 (CET)
 # BJM Tremblay
 
 msg <- function(...) {
@@ -561,7 +561,8 @@ make_pathogen_plot <- function(x) {
     x = ~What,
     y = ~Background,
     type = "bar",
-    name = "Average"
+    name = "Average",
+    visible = "legendonly"
   ) %>%
     add_trace(
       y = ~DUFs,
@@ -573,7 +574,8 @@ make_pathogen_plot <- function(x) {
     ) %>%
     add_trace(
       y = ~PFAM,
-      name = x
+      name = x,
+      visible = TRUE
     ) %>%
     layout(
       title = list(
