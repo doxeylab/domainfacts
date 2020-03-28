@@ -1,7 +1,7 @@
 #-------------------------------------------------------------------------------
 # DomainFacts v1.0
 # global.R
-# Last modified: 2020-03-28 13:08:09 (CET)
+# Last modified: 2020-03-28 16:11:26 (CET)
 # BJM Tremblay
 
 msg <- function(...) {
@@ -28,6 +28,8 @@ library(shinycssloaders)
 # suppressPackageStartupMessages(library(shinyjs))
 msg("  drawProteins")
 library(drawProteins)
+# msg("  formattable")
+# suppressPackageStartupMessages(library(formattable))
 
 #-------------------------------------------------------------------------------
 # Data - in memory
@@ -747,7 +749,7 @@ run_hmm <- function(x) {
   d <- as.integer(Sys.time())
   cat(c(">QUERY", x), file = paste0("queries/", d, ".fa"), sep = "\n")
   cmd <- paste0(
-    "hmmscan --domtblout queries/", d, ".out",
+    "hmmscan --domE 0.001 --domtblout queries/", d, ".out",
     " pfamdb/Pfam-A.hmm queries/", d, ".fa",
     " > hmmscan.lastlog"
   )
@@ -777,6 +779,7 @@ plot_domains <- function(x) {
     begin = x[["ali coord from"]],
     end = x[["ali coord to"]],
     order = 1,
+    entryName = "",
     stringsAsFactors = FALSE
   )
   y <- rbind(
@@ -786,19 +789,22 @@ plot_domains <- function(x) {
       begin = 1,
       end = x[["qlen"]][1],
       order = 1,
+      entryName = "",
       stringsAsFactors = FALSE
     ),
     y
   )
-  draw_canvas(y) %>%
-    draw_chains(y) %>%
-    draw_domains(y) +
+  domp <- draw_canvas(y) %>%
+    draw_chains(y, fill = "black") %>%
+    draw_domains(y, label_domains = FALSE) +
+    geom_rect(colour = "black") +
     theme_bw(base_size = 20) +
     xlim(0, y$end[1]) +
     xlab(element_blank()) +
-    # scale_fill_discrete(name = "") +
+    # scale_fill_discrete(name = element_blank()) +
     theme(
       legend.position = "none",
+      # legend.position = "bottom",
       panel.grid.minor = element_blank(),
       panel.grid.major = element_blank(),
       # axis.ticks = element_blank(),
@@ -806,6 +812,75 @@ plot_domains <- function(x) {
       axis.text.y = element_blank(),
       panel.border = element_blank()
     )
+  domp$layers[[1]]$mapping$ymin <- rlang::expr(order - 0.05)
+  domp$layers[[1]]$mapping$ymax <- rlang::expr(order + 0.05)
+  domp$layers[[3]]$aes_params <- list(colour = "black")
+  domp
+}
+
+make_hmmscan_table <- function(res, domplot) {
+  domcols <- ggplot_build(domplot)$data[[3]]$fill
+  domnames <- res[["target name"]]
+  domacc <- vapply(
+    strsplit(res[["accession"]], ".", TRUE),
+    function(x) x[1], character(1)
+  )
+  domfc <- DATA_ALL[domacc, "AF"]
+  domqval <- DATA_ALL[domacc, "AE"]
+  out <- data.frame(
+    fill = domcols,
+    Name = domnames,
+    Description = res[["description of target"]],
+    FoldChange = domfc,
+    Qvalue = domqval,
+    stringsAsFactors = FALSE
+  )
+  out <- out[!duplicated(out$fill), ]
+  rownames(out) <- domacc[!duplicated(domacc)]
+  domcols <- unname(vapply(out$fill, format_colours, character(1)))
+  out$fill <- vapply(
+    seq_len(nrow(out)),
+    function(x) paste0(rep(" ", x), collapse = ""),
+    character(1)
+  )
+  list(tab = out, cols = domcols)
+  # formattable(out,
+  #   list(
+  #     fill = color_tile(csscolor(out$fill))
+  #   )
+  # )
+}
+
+format_colours <- function(x) {
+  x <- as.integer(grDevices::col2rgb(x))
+  paste0("rgb(", x[1], ", ", x[2], ", ", x[3], ")")
+}
+
+hmmscan_table_cols <- htmltools::withTags(table(
+  class = "display",
+  thead(
+    tr(
+      th(""),
+      th(""),
+      th("Domain name"),
+      th("Description"),
+      th("Pathogen enrichment fold change"),
+      th("Q-value", title = "Pathogen enrichment Q-value")
+    )
+  )
+))
+
+make_hmmscan_tab <- function() {
+  tagList(
+    column(2),
+    column(8, wellPanel(
+      plotOutput("HMMSCAN_PLOT", height = "100px", width = "100%"),
+      br(),
+      tags$em("Click on a Pfam to go to the stats page."),
+      DT::dataTableOutput("HMMSCAN_TABLE")
+    )),
+    column(2)
+  )
 }
 
 #-------------------------------------------------------------------------------

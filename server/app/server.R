@@ -1,7 +1,7 @@
 #-------------------------------------------------------------------------------
 # DomainFacts v1.0
 # server.R
-# Last modified: 2020-03-28 13:02:59 (CET)
+# Last modified: 2020-03-28 16:11:38 (CET)
 # BJM Tremblay
 
 msg("Loading server.R")
@@ -150,6 +150,14 @@ server <- function(input, output, session) {
     SelectedPFAM$Id <- what$value
   })
 
+  observeEvent(input$HMMSCAN_TABLE_cell_clicked, {
+    what <- input$HMMSCAN_TABLE_cell_clicked
+    req(what$value)
+    if (what$col != 0) return()
+    SelectedPFAM$Id <- what$value
+    updateNavbarPage(session, "NAVBAR_PAGE", "STATS_TAB")
+  })
+
   output$PMF_TABLE <- DT::renderDataTable({
     validate(need(
       SelectedPFAM$Id %in% PFAMsWithPMFs,
@@ -163,19 +171,56 @@ server <- function(input, output, session) {
     make_pmf_table(x)
   })
 
-  HmmScanPlot <- reactiveValues(Plot = NULL)
+  HmmScanRes <- reactiveValues(Res = NULL, Plot = NULL)
 
   observeEvent(input$HMMSCAN_BUTTON, {
     req(input$HMMSCAN_INPUT)
     res <- run_hmm(input$HMMSCAN_INPUT)
     if (!is.null(res)) {
-      HmmScanPlot$Plot <- plot_domains(res)
+      HmmScanRes$Res <- res
+      HmmScanRes$Plot <- plot_domains(res)
+      updateNavbarPage(session, "NAVBAR_PAGE", "HMMSCAN_TAB")
     }
   })
 
   output$HMMSCAN_PLOT <- renderPlot({
-    req(HmmScanPlot$Plot)
-    HmmScanPlot$Plot
+    req(HmmScanRes$Plot)
+    HmmScanRes$Plot
+  })
+
+  output$TAB_HMMSCAN_RESULTS <- renderUI({
+    make_hmmscan_tab()
+  })
+
+  output$HMMSCAN_TABLE <- DT::renderDataTable({
+    req(HmmScanRes$Res)
+    out <- make_hmmscan_table(HmmScanRes$Res, HmmScanRes$Plot)
+    DT::datatable(
+      out$tab,
+      escape = FALSE,
+      container = hmmscan_table_cols,
+      selection = "none",
+      options = list(
+        dom = "t",
+        ordering = FALSE
+      )
+    ) %>%
+      formatStyle(0, cursor = "pointer") %>%
+      formatStyle(
+        "FoldChange",
+        background = styleColorBar(
+          c(0, max(out$tab$FoldChange) + 1), "lightblue"
+        ),
+        backgroundSize = "98% 88%",
+        backgroundRepeat = "no-repeat",
+        backgroundPosition = "center"
+      ) %>%
+      formatSignif("Qvalue", digits = 3) %>%
+      # formatStyle("fill", backgroundColor = print(out$cols))
+      formatStyle(
+        "fill",
+        backgroundColor = styleEqual(out$tab$fill, out$cols)
+      )
   })
 
 }
