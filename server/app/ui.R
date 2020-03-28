@@ -1,7 +1,7 @@
 #-------------------------------------------------------------------------------
 # DomainFacts v1.0
 # ui.R
-# Last modified: 2020-03-28 15:25:20 (CET)
+# Last modified: 2020-03-28 16:21:36 (CET)
 # BJM Tremblay
 
 msg("Loading ui.R")
@@ -88,7 +88,10 @@ ui <- function(request) fluidPage(
             br(),
             textAreaInput("HMMSCAN_INPUT",
               "Input a single amino acid sequence string:",
-              value = "", placeholder = ""
+              value = "", placeholder = "", height = "150px"
+            ),
+            numericInput(
+              "HMMSCAN_EVALUE", "E-value:", 0.05, width = "90px"
             ),
             actionLink("HMMSCAN_BUTTON", "Submit")
           )

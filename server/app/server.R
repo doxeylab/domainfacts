@@ -1,7 +1,7 @@
 #-------------------------------------------------------------------------------
 # DomainFacts v1.0
 # server.R
-# Last modified: 2020-03-28 16:11:38 (CET)
+# Last modified: 2020-03-28 16:20:07 (CET)
 # BJM Tremblay
 
 msg("Loading server.R")
@@ -175,7 +175,7 @@ server <- function(input, output, session) {
 
   observeEvent(input$HMMSCAN_BUTTON, {
     req(input$HMMSCAN_INPUT)
-    res <- run_hmm(input$HMMSCAN_INPUT)
+    res <- run_hmm(input$HMMSCAN_INPUT, input$HMMSCAN_EVALUE)
     if (!is.null(res)) {
       HmmScanRes$Res <- res
       HmmScanRes$Plot <- plot_domains(res)

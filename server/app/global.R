@@ -1,7 +1,7 @@
 #-------------------------------------------------------------------------------
 # DomainFacts v1.0
 # global.R
-# Last modified: 2020-03-28 16:11:26 (CET)
+# Last modified: 2020-03-28 16:20:20 (CET)
 # BJM Tremblay
 
 msg <- function(...) {
@@ -739,7 +739,7 @@ parse_hmm_res <- function(x) {
   out
 }
 
-run_hmm <- function(x) {
+run_hmm <- function(x, evalue) {
   x <- clean_query(x)
   check <- check_query(x)
   if (!check$status) {
@@ -749,7 +749,7 @@ run_hmm <- function(x) {
   d <- as.integer(Sys.time())
   cat(c(">QUERY", x), file = paste0("queries/", d, ".fa"), sep = "\n")
   cmd <- paste0(
-    "hmmscan --domE 0.001 --domtblout queries/", d, ".out",
+    "hmmscan --domE ", evalue, " --domtblout queries/", d, ".out",
     " pfamdb/Pfam-A.hmm queries/", d, ".fa",
     " > hmmscan.lastlog"
   )
