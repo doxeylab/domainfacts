@@ -1,7 +1,7 @@
 #-------------------------------------------------------------------------------
 # DomainFacts v1.0
 # ui.R
-# Last modified: 2020-03-28 17:29:03 (CET)
+# Last modified: 2020-03-28 19:45:22 (CET)
 # BJM Tremblay
 
 msg("Loading ui.R")
@@ -36,20 +36,39 @@ ui <- function(request) fluidPage(
       fluidRow(
         br(),
         column(2),
+        column(8,
+          wellPanel(
+            tags$h3("hmmscan Input"),
+            br(),
+            textAreaInput("HMMSCAN_INPUT",
+              "Input a single amino acid sequence string:",
+              value = "", placeholder = "", height = "150px"
+            ),
+            numericInput(
+              "HMMSCAN_EVALUE", "E-value:", 0.01, width = "90px"
+            ),
+            actionLink("HMMSCAN_BUTTON", "Submit")
+          )
+          # plotOutput("HMMSCAN_PLOT")
+        ),
+        column(2)
+      ),
+      fluidRow(
+        column(2),
         column(4,
           wellPanel(
             tags$h3("Individual domain search"),
             br(),
-            checkboxInput(
-              "SIDE_PANEL_INPUT_NONDUF_CHECKBOX",
-              label = "Show non-DUFs",
-              value = TRUE
-            ),
-            checkboxInput(
-              "SIDE_PANEL_INPUT_DUF_CHECKBOX",
-              label = "Show DUFs",
-              value = TRUE
-            ),
+            # checkboxInput(
+            #   "SIDE_PANEL_INPUT_NONDUF_CHECKBOX",
+            #   label = "Show non-DUFs",
+            #   value = TRUE
+            # ),
+            # checkboxInput(
+            #   "SIDE_PANEL_INPUT_DUF_CHECKBOX",
+            #   label = "Show DUFs",
+            #   value = TRUE
+            # ),
             selectizeInput(
               "SIDE_PANEL_INPUT_SEARCH",
               "Keyword search",
@@ -77,25 +96,6 @@ ui <- function(request) fluidPage(
             actionLink("BUTTON_GUT", "Human-gut associated and pathogen-associated"), br(), br(),
             actionLink("BUTTON_STRUCTURAL", "Structural characterization feasibility")
           )
-        ),
-        column(2)
-      ),
-      fluidRow(
-        column(2),
-        column(8,
-          wellPanel(
-            tags$h3("hmmscan Input"),
-            br(),
-            textAreaInput("HMMSCAN_INPUT",
-              "Input a single amino acid sequence string:",
-              value = "", placeholder = "", height = "150px"
-            ),
-            numericInput(
-              "HMMSCAN_EVALUE", "E-value:", 0.01, width = "90px"
-            ),
-            actionLink("HMMSCAN_BUTTON", "Submit")
-          )
-          # plotOutput("HMMSCAN_PLOT")
         ),
         column(2)
       )
