@@ -1,7 +1,7 @@
 #-------------------------------------------------------------------------------
 # DomainFacts v1.0
 # global.R
-# Last modified: 2020-03-28 16:20:20 (CET)
+# Last modified: 2020-03-28 17:28:35 (CET)
 # BJM Tremblay
 
 msg <- function(...) {
@@ -831,6 +831,7 @@ make_hmmscan_table <- function(res, domplot) {
     fill = domcols,
     Name = domnames,
     Description = res[["description of target"]],
+    Evalue = res[["E-value"]],
     FoldChange = domfc,
     Qvalue = domqval,
     stringsAsFactors = FALSE
@@ -864,8 +865,9 @@ hmmscan_table_cols <- htmltools::withTags(table(
       th(""),
       th("Domain name"),
       th("Description"),
+      th("E-value"),
       th("Pathogen enrichment fold change"),
-      th("Q-value", title = "Pathogen enrichment Q-value")
+      th("Pathogen enrichment Q-value")
     )
   )
 ))

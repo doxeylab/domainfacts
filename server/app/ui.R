@@ -1,7 +1,7 @@
 #-------------------------------------------------------------------------------
 # DomainFacts v1.0
 # ui.R
-# Last modified: 2020-03-28 16:21:36 (CET)
+# Last modified: 2020-03-28 17:29:03 (CET)
 # BJM Tremblay
 
 msg("Loading ui.R")
@@ -91,7 +91,7 @@ ui <- function(request) fluidPage(
               value = "", placeholder = "", height = "150px"
             ),
             numericInput(
-              "HMMSCAN_EVALUE", "E-value:", 0.05, width = "90px"
+              "HMMSCAN_EVALUE", "E-value:", 0.01, width = "90px"
             ),
             actionLink("HMMSCAN_BUTTON", "Submit")
           )
