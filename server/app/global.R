@@ -1,7 +1,7 @@
 #-------------------------------------------------------------------------------
 # DomainFacts v1.0
 # global.R
-# Last modified: 2020-03-28 12:49:43 (CET)
+# Last modified: 2020-03-28 13:08:09 (CET)
 # BJM Tremblay
 
 msg <- function(...) {
@@ -760,6 +760,12 @@ run_hmm <- function(x) {
   }
   msg("hmmscan successful")
   res <- parse_hmm_res(paste0("queries/", d, ".out"))
+  if (!nrow(res)) {
+    showModal(modalDialog(
+      title = "hmmscan", "Sorry, no domains were found."
+    ))
+    return(NULL)
+  }
   # use 'ali coord from' and 'ali coord to'
   res
 }
