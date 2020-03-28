@@ -1,7 +1,7 @@
 #-------------------------------------------------------------------------------
 # DomainFacts v1.0
 # server.R
-# Last modified: 2020-03-28 19:46:13 (CET)
+# Last modified: 2020-03-28 22:07:17 (CET)
 # BJM Tremblay
 
 msg("Loading server.R")
@@ -79,13 +79,14 @@ server <- function(input, output, session) {
     updateNavbarPage(session, "NAVBAR_PAGE", "SEARCH_TAB")
   })
 
-  observe({
-    lapply(GET_BUTTONS(), function(x) {
-      observeEvent(input[[x]], {
-        SelectedFilter$Which <- x
-        updateNavbarPage(session, "NAVBAR_PAGE", "TABLE_TAB")
-      })
-    })
+  observeEvent(input$DOMAIN_RANKINGS_DROPDOWN, {
+    req(input$DOMAIN_RANKINGS_DROPDOWN)
+    SelectedFilter$Which <- input$DOMAIN_RANKINGS_DROPDOWN
+    updateNavbarPage(session, "NAVBAR_PAGE", "TABLE_TAB")
+    updateSelectInput(
+      session, "DOMAIN_RANKINGS_DROPDOWN",
+      selected = c(Choose = "")
+    )
   })
 
   observeEvent(input$DOMAIN_TABLE_cell_clicked, {

@@ -1,7 +1,7 @@
 #-------------------------------------------------------------------------------
 # DomainFacts v1.0
 # ui.R
-# Last modified: 2020-03-28 19:45:22 (CET)
+# Last modified: 2020-03-28 21:55:09 (CET)
 # BJM Tremblay
 
 msg("Loading ui.R")
@@ -38,8 +38,8 @@ ui <- function(request) fluidPage(
         column(2),
         column(8,
           wellPanel(
-            tags$h3("hmmscan Input"),
-            br(),
+            tags$h3("Sequence input"),
+            tags$h4("Enter your protein sequence to predict pathogen-associated domains."),
             textAreaInput("HMMSCAN_INPUT",
               "Input a single amino acid sequence string:",
               value = "", placeholder = "", height = "150px"
@@ -57,8 +57,9 @@ ui <- function(request) fluidPage(
         column(2),
         column(4,
           wellPanel(
-            tags$h3("Individual domain search"),
-            br(),
+            tags$h3("Domain database"),
+            tags$h4("Explore individual Pfam domains in terms of pathogen-association and other statistics."),
+            # br(),
             # checkboxInput(
             #   "SIDE_PANEL_INPUT_NONDUF_CHECKBOX",
             #   label = "Show non-DUFs",
@@ -86,15 +87,33 @@ ui <- function(request) fluidPage(
         ),
         column(4,
           wellPanel(
-            tags$h3("Domain table with preset filters"), br(),
-            actionLink("BUTTON_ABUNDANCE", "Abundance"), br(), br(),
-            actionLink("BUTTON_ENVIRONMENT", "Environment association"), br(), br(),
-            actionLink("BUTTON_LINEAGE", "Lineage specificity"), br(), br(),
-            actionLink("BUTTON_PATHOGEN", "Pathogen association"), br(), br(),
-            actionLink("BUTTON_BROAD_PATHOGEN", "Broadly distributed and pathogen-associated"), br(), br(),
-            actionLink("BUTTON_MIMICRY", "Mimicry - pathogen-associated but most common in eukaryotes"), br(), br(),
-            actionLink("BUTTON_GUT", "Human-gut associated and pathogen-associated"), br(), br(),
-            actionLink("BUTTON_STRUCTURAL", "Structural characterization feasibility")
+            # tags$h3("Domain table with preset filters"), br(),
+            tags$h3("Domain rankings"),
+            tags$h4("Explore lists of top-scoring Pfam domains according to pathogen-association and other criteria."),
+            selectInput(
+              "DOMAIN_RANKINGS_DROPDOWN",
+              "Choose a list",
+              c(
+                Choose = "",
+                "Abundance" = "BUTTON_ABUNDANCE",
+                "Environment association" = "BUTTON_ENVIRONMENT",
+                "Lineage specificity" = "BUTTON_LINEAGE",
+                "Pathogen association" = "BUTTON_PATHOGEN",
+                "Broadly distributed and pathogen-associated" = "BUTTON_BROAD_PATHOGEN",
+                "Mimicry - pathogen-associated but most common in eukaryotes" = "BUTTON_MIMICRY",
+                "Human-gut associated and pathogen-associated" = "BUTTON_GUT",
+                "Structural characterization feasibility" = "BUTTON_STRUCTURAL"
+              ),
+              selectize = FALSE
+            )
+            # actionLink("BUTTON_ABUNDANCE", "Abundance"), br(), br(),
+            # actionLink("BUTTON_ENVIRONMENT", "Environment association"), br(), br(),
+            # actionLink("BUTTON_LINEAGE", "Lineage specificity"), br(), br(),
+            # actionLink("BUTTON_PATHOGEN", "Pathogen association"), br(), br(),
+            # actionLink("BUTTON_BROAD_PATHOGEN", "Broadly distributed and pathogen-associated"), br(), br(),
+            # actionLink("BUTTON_MIMICRY", "Mimicry - pathogen-associated but most common in eukaryotes"), br(), br(),
+            # actionLink("BUTTON_GUT", "Human-gut associated and pathogen-associated"), br(), br(),
+            # actionLink("BUTTON_STRUCTURAL", "Structural characterization feasibility")
           )
         ),
         column(2)
