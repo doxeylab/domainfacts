@@ -1,7 +1,7 @@
 #-------------------------------------------------------------------------------
 # DomainFacts v1.0
 # ui.R
-# Last modified: 2020-03-25 14:17:55 (CET)
+# Last modified: 2020-03-28 13:04:00 (CET)
 # BJM Tremblay
 
 msg("Loading ui.R")
@@ -79,6 +79,22 @@ ui <- function(request) fluidPage(
           )
         ),
         column(2)
+      ),
+      fluidRow(
+        column(2),
+        column(8,
+          wellPanel(
+            tags$h3("hmmscan Input"),
+            br(),
+            textAreaInput("HMMSCAN_INPUT",
+              "Input a single amino acid sequence string:",
+              value = "", placeholder = ""
+            ),
+            actionLink("HMMSCAN_BUTTON", "Submit")
+          ),
+          plotOutput("HMMSCAN_PLOT")
+        ),
+        column(2)
       )
     ),
 
@@ -90,6 +106,16 @@ ui <- function(request) fluidPage(
       br(),
       uiOutput("TAB_DOMAIN_TABLE")
     ),
+
+    # tabPanel("", value = "HMMSCAN_TAB",
+    #   wellPanel(
+    #     textAreaInput("HMMSCAN_INPUT",
+    #       "Input a single amino acid sequence string:",
+    #       value = "", placeholder = ""
+    #     ),
+    #     actionLink("HMMSCAN_BUTTON", "Submit")
+    #   )
+    # ),
 
     tabPanel(div(img(src="logo2.png", height = 53, width = 0), "About"),
       tags$h2("About"),

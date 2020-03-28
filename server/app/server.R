@@ -1,7 +1,7 @@
 #-------------------------------------------------------------------------------
 # DomainFacts v1.0
 # server.R
-# Last modified: 2020-03-25 14:08:57 (CET)
+# Last modified: 2020-03-28 13:02:59 (CET)
 # BJM Tremblay
 
 msg("Loading server.R")
@@ -161,6 +161,21 @@ server <- function(input, output, session) {
       "Could not find any PFAMs with probable matching function."
     ))
     make_pmf_table(x)
+  })
+
+  HmmScanPlot <- reactiveValues(Plot = NULL)
+
+  observeEvent(input$HMMSCAN_BUTTON, {
+    req(input$HMMSCAN_INPUT)
+    res <- run_hmm(input$HMMSCAN_INPUT)
+    if (!is.null(res)) {
+      HmmScanPlot$Plot <- plot_domains(res)
+    }
+  })
+
+  output$HMMSCAN_PLOT <- renderPlot({
+    req(HmmScanPlot$Plot)
+    HmmScanPlot$Plot
   })
 
 }

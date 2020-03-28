@@ -1,7 +1,7 @@
 #-------------------------------------------------------------------------------
 # DomainFacts v1.0
 # global.R
-# Last modified: 2020-03-27 20:32:25 (CET)
+# Last modified: 2020-03-28 12:49:43 (CET)
 # BJM Tremblay
 
 msg <- function(...) {
@@ -26,6 +26,8 @@ msg("  shinycssloaders")
 library(shinycssloaders)
 # msg("  shinyjs")
 # suppressPackageStartupMessages(library(shinyjs))
+msg("  drawProteins")
+library(drawProteins)
 
 #-------------------------------------------------------------------------------
 # Data - in memory
@@ -670,6 +672,134 @@ make_domain_stats_tab <- function() {
       column(1)
     )
   )
+}
+
+#-------------------------------------------------------------------------------
+# hmm stuff
+clean_query <- function(query) {
+  gsub("\\s+", "", toupper(query))
+}
+
+check_query <- function(x) {
+  if (grepl("^>", x)) {
+    return(list(
+      status = FALSE,
+      reason = "Please make sure query is not fasta-formatted."
+    ))
+  }
+  if (grepl("[^ABCDEFGHIKLMNPQRSTUVWYZX]", x)) {
+    return(list(
+      status = FALSE,
+      reason = paste(
+        "An unknown character was found. Only the following characters",
+        "(as well as whitespace) are allowed: ABCDEFGHIKLMNPQRSTUVWYZX"
+      )
+    ))
+  }
+  if (nchar(x) < 10 || nchar(x) > 10000) {
+    return(list(
+      status = FALSE,
+      reason = "Queries must be in between 10-10000 characters long."
+    ))
+  }
+  list(status = TRUE)
+}
+
+parse_hmm_res <- function(x) {
+  cw <- nchar(strsplit(readr::read_lines(x)[3], " ", TRUE)[[1]]) + 1
+  cw <- c(cw[-length(cw)], NA)
+  out <- readr::read_fwf(x, readr::fwf_widths(cw), comment = "#")
+  colnames(out) <- c(
+    "target name",  # The name of the target sequence or profile
+    "accession",  # acc of the target sequence or profile
+    "tlen",  # length of target sequence
+    "query name",  # name of query sequence
+    "accession",  # acc of target sequence
+    "qlen",  # length of query sequence
+    "E-value",  # evalue of overall sequence/profile comparison
+    "score",  # bit score of overall sequence/profile comparison
+    "bias",  # biased composition score correction applied to score
+    "#",  # domain's number
+    "of",  # total number of domains reported in sequence
+    "c-Evalue",  # conditional evalue; measure of how reliable domain is
+    "i-Evalue",  # independent evalue; score if this was the only comparison
+    "score",  # bit score for this domain
+    "bias",  # biased composition score correction applied to this domain score
+    "hmm coord from",  # start of MEA alignment of this domain with respect to profile
+    "hmm coord to",  # end of MEA alignment
+    "ali coord from",  # start of MEA alignment of this domain with respect to sequence
+    "ali coord to",  # end of MEA alignment of this domain with respect to sequence
+    "env coord from",  # start of the domain envelope on the sequence
+    "env coord to",  # end of domain envelope on the sequence
+    "acc",  # mean posterior probability of aligned residues in MEA alignment
+    "description of target"  # target's description
+  )
+  out
+}
+
+run_hmm <- function(x) {
+  x <- clean_query(x)
+  check <- check_query(x)
+  if (!check$status) {
+    showModal(modalDialog(title = "Error", check$reason))
+    return(NULL)
+  }
+  d <- as.integer(Sys.time())
+  cat(c(">QUERY", x), file = paste0("queries/", d, ".fa"), sep = "\n")
+  cmd <- paste0(
+    "hmmscan --domtblout queries/", d, ".out",
+    " pfamdb/Pfam-A.hmm queries/", d, ".fa",
+    " > hmmscan.lastlog"
+  )
+  if (system(cmd)) {
+    msg("hmmscan failed")
+    showModal(modalDialog(
+      title = "hmmscan Error", "hmmscan failed. Please contact the admin."
+    ))
+    return(NULL)
+  }
+  msg("hmmscan successful")
+  res <- parse_hmm_res(paste0("queries/", d, ".out"))
+  # use 'ali coord from' and 'ali coord to'
+  res
+}
+
+plot_domains <- function(x) {
+  y <- data.frame(
+    type = "DOMAIN",
+    description = x[["target name"]],
+    begin = x[["ali coord from"]],
+    end = x[["ali coord to"]],
+    order = 1,
+    stringsAsFactors = FALSE
+  )
+  y <- rbind(
+    data.frame(
+      type = "CHAIN",
+      description = "Query",
+      begin = 1,
+      end = x[["qlen"]][1],
+      order = 1,
+      stringsAsFactors = FALSE
+    ),
+    y
+  )
+  draw_canvas(y) %>%
+    draw_chains(y) %>%
+    draw_domains(y) +
+    theme_bw(base_size = 20) +
+    xlim(0, y$end[1]) +
+    xlab(element_blank()) +
+    # scale_fill_discrete(name = "") +
+    theme(
+      legend.position = "none",
+      panel.grid.minor = element_blank(),
+      panel.grid.major = element_blank(),
+      # axis.ticks = element_blank(),
+      axis.ticks.y = element_blank(),
+      axis.text.y = element_blank(),
+      panel.border = element_blank()
+    )
 }
 
 #-------------------------------------------------------------------------------
