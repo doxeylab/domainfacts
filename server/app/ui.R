@@ -1,7 +1,7 @@
 #-------------------------------------------------------------------------------
 # DomainFacts v1.0
 # ui.R
-# Last modified: 2020-03-28 21:55:09 (CET)
+# Last modified: 2020-03-28 22:08:00 (CET)
 # BJM Tremblay
 
 msg("Loading ui.R")
@@ -49,7 +49,6 @@ ui <- function(request) fluidPage(
             ),
             actionLink("HMMSCAN_BUTTON", "Submit")
           )
-          # plotOutput("HMMSCAN_PLOT")
         ),
         column(2)
       ),
@@ -59,35 +58,17 @@ ui <- function(request) fluidPage(
           wellPanel(
             tags$h3("Domain database"),
             tags$h4("Explore individual Pfam domains in terms of pathogen-association and other statistics."),
-            # br(),
-            # checkboxInput(
-            #   "SIDE_PANEL_INPUT_NONDUF_CHECKBOX",
-            #   label = "Show non-DUFs",
-            #   value = TRUE
-            # ),
-            # checkboxInput(
-            #   "SIDE_PANEL_INPUT_DUF_CHECKBOX",
-            #   label = "Show DUFs",
-            #   value = TRUE
-            # ),
             selectizeInput(
               "SIDE_PANEL_INPUT_SEARCH",
               "Keyword search",
               choices = NULL
             ),
-            # searchInput(
-            #   "SIDE_PANEL_INPUT_SEARCH",
-            #   "Keyword search",
-            #   btnSearch = icon("search"),
-            #   btnReset = icon("remove")
-            # ),
             textOutput("SIDE_PANEL_INPUT_SEARCH_TEXT"),
             DT::dataTableOutput("SIDE_PANEL_INPUT_SEARCH_TABLE")
           )
         ),
         column(4,
           wellPanel(
-            # tags$h3("Domain table with preset filters"), br(),
             tags$h3("Domain rankings"),
             tags$h4("Explore lists of top-scoring Pfam domains according to pathogen-association and other criteria."),
             selectInput(
@@ -106,14 +87,6 @@ ui <- function(request) fluidPage(
               ),
               selectize = FALSE
             )
-            # actionLink("BUTTON_ABUNDANCE", "Abundance"), br(), br(),
-            # actionLink("BUTTON_ENVIRONMENT", "Environment association"), br(), br(),
-            # actionLink("BUTTON_LINEAGE", "Lineage specificity"), br(), br(),
-            # actionLink("BUTTON_PATHOGEN", "Pathogen association"), br(), br(),
-            # actionLink("BUTTON_BROAD_PATHOGEN", "Broadly distributed and pathogen-associated"), br(), br(),
-            # actionLink("BUTTON_MIMICRY", "Mimicry - pathogen-associated but most common in eukaryotes"), br(), br(),
-            # actionLink("BUTTON_GUT", "Human-gut associated and pathogen-associated"), br(), br(),
-            # actionLink("BUTTON_STRUCTURAL", "Structural characterization feasibility")
           )
         ),
         column(2)

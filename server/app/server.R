@@ -1,7 +1,7 @@
 #-------------------------------------------------------------------------------
 # DomainFacts v1.0
 # server.R
-# Last modified: 2020-03-28 22:07:17 (CET)
+# Last modified: 2020-03-28 22:08:14 (CET)
 # BJM Tremblay
 
 msg("Loading server.R")
@@ -41,10 +41,7 @@ server <- function(input, output, session) {
   output$SIDE_PANEL_INPUT_SEARCH_TABLE <- renderDataTable({
     req(input$SIDE_PANEL_INPUT_SEARCH)
     res <- searchPFAMs(
-      input$SIDE_PANEL_INPUT_SEARCH,
-      FALSE, FALSE
-      # !input$SIDE_PANEL_INPUT_NONDUF_CHECKBOX,
-      # !input$SIDE_PANEL_INPUT_DUF_CHECKBOX
+      input$SIDE_PANEL_INPUT_SEARCH, FALSE, FALSE
     )
     if (!is.null(res)) {
       SelectedPFAM$Success <- TRUE
