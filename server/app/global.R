@@ -1,7 +1,7 @@
 #-------------------------------------------------------------------------------
 # DomainFacts v1.0
 # global.R
-# Last modified: 2020-03-28 19:36:57 (CET)
+# Last modified: 2020-03-28 21:17:29 (CET)
 # BJM Tremblay
 
 msg <- function(...) {
@@ -828,6 +828,7 @@ make_hmmscan_table <- function(res, domplot) {
     function(x) x[1], character(1)
   )
   domfc <- DATA_ALL[domacc, "AF"]
+  domfc[is.na(domfc)] <- 0
   domqval <- DATA_ALL[domacc, "AE"]
   out <- data.frame(
     fill = domcols,
