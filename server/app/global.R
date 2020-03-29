@@ -1,7 +1,7 @@
 #-------------------------------------------------------------------------------
 # VirFams v1.0
 # global.R
-# Last modified: 2020-03-29 11:45:50 (CEST)
+# Last modified: 2020-03-29 17:22:11 (CEST)
 # BJM Tremblay
 
 msg <- function(...) {
@@ -763,7 +763,35 @@ parse_hmm_res <- function(x) {
   out
 }
 
-run_hmm <- function(x, evalue) {
+res_list_to_df <- function(x) {
+  data.frame(
+    name = x$name,
+    bits = as.numeric(x$bits),
+    env_to = as.integer(x$env$to),
+    env_from = as.integer(x$env$from),
+    model_length = as.integer(x$model_length),
+    evalue = as.numeric(x$evalue),
+    seq_from = as.integer(x$seq$from),
+    seq_to = as.integer(x$seq$to),
+    seq_name = x$seq$name,
+    description = x$desc,
+    clan = x$clan,
+    type = x$type,
+    hmm_to = as.integer(x$hmm$to),
+    hmm_from = as.integer(x$hmm$from),
+    sig = as.numeric(x$sig),
+    acc = strsplit(x$acc, ".", TRUE)[[1]][1],
+    row.names = NULL,
+    stringsAsFactors = FALSE
+  )
+}
+parse_hmm_res_json <- function(x, evalue = 0.001) {
+  out <- rjson::fromJSON(file = x)
+  out <- do.call(rbind, lapply(out, res_list_to_df))
+  out[out$evalue <= evalue, ]
+}
+
+run_hmm <- function(x, evalue = 0.001) {
   x <- clean_query(x)
   check <- check_query(x)
   if (!check$status) {
@@ -773,10 +801,14 @@ run_hmm <- function(x, evalue) {
   d <- as.integer(Sys.time())
   cat(c(">QUERY", x), file = paste0("queries/", d, ".fa"), sep = "\n")
   cmd <- paste0(
-    "hmmscan --domE ", evalue, " --domtblout queries/", d, ".out",
-    " pfamdb/Pfam-A.hmm queries/", d, ".fa",
-    " > hmmscan.lastlog"
+    "PERL5LIB=PfamScan:$PERL5LIB PfamScan/./pfam_scan.pl -fasta queries/",
+    d, ".fa -dir pfamdb/ -json > queries/", d, ".out"
   )
+  # cmd <- paste0(
+  #   "hmmscan --domE ", evalue, " --domtblout queries/", d, ".out",
+  #   " pfamdb/Pfam-A.hmm queries/", d, ".fa",
+  #   " > hmmscan.lastlog"
+  # )
   if (system(cmd)) {
     msg("hmmscan failed")
     showModal(modalDialog(
@@ -785,23 +817,27 @@ run_hmm <- function(x, evalue) {
     return(NULL)
   }
   msg("hmmscan successful")
-  res <- parse_hmm_res(paste0("queries/", d, ".out"))
+  # res <- parse_hmm_res(paste0("queries/", d, ".out"))
+  res <- parse_hmm_res_json(paste0("queries/", d, ".out"), evalue)
   if (!nrow(res)) {
     showModal(modalDialog(
       title = "hmmscan", "Sorry, no domains were found."
     ))
     return(NULL)
   }
-  # use 'ali coord from' and 'ali coord to'
+  res$qlen <- nchar(x)
   res
 }
 
-plot_domains <- function(x) {
+plot_domains <- function(x, qlen) {
   y <- data.frame(
     type = "DOMAIN",
-    description = x[["target name"]],
-    begin = x[["ali coord from"]],
-    end = x[["ali coord to"]],
+    # description = x[["target name"]],
+    description = x$description,
+    # begin = x[["ali coord from"]],
+    begin = x$seq_from,
+    # end = x[["ali coord to"]],
+    end = x$seq_to,
     order = 1,
     entryName = "",
     stringsAsFactors = FALSE
@@ -811,7 +847,7 @@ plot_domains <- function(x) {
       type = "CHAIN",
       description = "Query",
       begin = 1,
-      end = x[["qlen"]][1],
+      end = x$qlen[1],
       order = 1,
       entryName = "",
       stringsAsFactors = FALSE
@@ -844,19 +880,22 @@ plot_domains <- function(x) {
 
 make_hmmscan_table <- function(res, domplot) {
   domcols <- ggplot_build(domplot)$data[[3]]$fill
-  domnames <- res[["target name"]]
-  domacc <- vapply(
-    strsplit(res[["accession"]], ".", TRUE),
-    function(x) x[1], character(1)
-  )
+  domnames <- res$name
+  domacc <- res$acc
+  # domacc <- vapply(
+  #   strsplit(res[["accession"]], ".", TRUE),
+  #   function(x) x[1], character(1)
+  # )
   domfc <- DATA_ALL[domacc, "AF"]
   domfc[is.na(domfc)] <- 0
   domqval <- DATA_ALL[domacc, "AE"]
   out <- data.frame(
     fill = domcols,
     Name = domnames,
-    Description = res[["description of target"]],
-    Evalue = res[["E-value"]],
+    # Description = res[["description of target"]],
+    Description = res$description,
+    # Evalue = res[["c-Evalue"]],
+    Evalue = res$evalue,
     FoldChange = domfc,
     Qvalue = domqval,
     stringsAsFactors = FALSE
