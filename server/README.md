@@ -12,6 +12,8 @@ This app was designed for R version 3.6.3 or later. The following CRAN R package
 
 The data files needed to run the app can downloaded here: LINK. Place them in the `app/data/` directory.
 
+Furthermore, install `hmmer`. Also download PfamScan and drop the folder in the `app` directory (make sure to install perl dependencies).
+
 ### Server
 
 First install the following programs:
