@@ -1,7 +1,7 @@
 #-------------------------------------------------------------------------------
 # VirFams v1.0
 # global.R
-# Last modified: 2020-03-29 17:22:11 (CEST)
+# Last modified: 2020-03-29 17:42:17 (CEST)
 # BJM Tremblay
 
 msg <- function(...) {
@@ -760,7 +760,16 @@ parse_hmm_res <- function(x) {
     "acc",  # mean posterior probability of aligned residues in MEA alignment
     "description of target"  # target's description
   )
-  out
+  data.frame(
+    name = out[["target name"]],
+    description = out[["description of target"]],
+    seq_from = out[["ali coord from"]],
+    seq_to = out[["ali coord to"]],
+    acc = vapply(strsplit(out$accession, ".", TRUE), function(x) x[1], character(1)),
+    evalue = out[["c-Evalue"]],
+    row.names = NULL,
+    stringsAsFactors = FALSE
+  )
 }
 
 res_list_to_df <- function(x) {
@@ -791,7 +800,7 @@ parse_hmm_res_json <- function(x, evalue = 0.001) {
   out[out$evalue <= evalue, ]
 }
 
-run_hmm <- function(x, evalue = 0.001) {
+run_hmm <- function(x, evalue = 0.001, usePfamScan = TRUE) {
   x <- clean_query(x)
   check <- check_query(x)
   if (!check$status) {
@@ -800,15 +809,18 @@ run_hmm <- function(x, evalue = 0.001) {
   }
   d <- as.integer(Sys.time())
   cat(c(">QUERY", x), file = paste0("queries/", d, ".fa"), sep = "\n")
-  cmd <- paste0(
-    "PERL5LIB=PfamScan:$PERL5LIB PfamScan/./pfam_scan.pl -fasta queries/",
-    d, ".fa -dir pfamdb/ -json > queries/", d, ".out"
-  )
-  # cmd <- paste0(
-  #   "hmmscan --domE ", evalue, " --domtblout queries/", d, ".out",
-  #   " pfamdb/Pfam-A.hmm queries/", d, ".fa",
-  #   " > hmmscan.lastlog"
-  # )
+  if (usePfamScan) {
+    cmd <- paste0(
+      "PERL5LIB=PfamScan:$PERL5LIB PfamScan/./pfam_scan.pl -fasta queries/",
+      d, ".fa -dir pfamdb/ -json > queries/", d, ".out"
+    )
+  } else {
+    cmd <- paste0(
+      "hmmscan --domE ", evalue, " --domtblout queries/", d, ".out",
+      " pfamdb/Pfam-A.hmm queries/", d, ".fa",
+      " > hmmscan.lastlog"
+    )
+  }
   if (system(cmd)) {
     msg("hmmscan failed")
     showModal(modalDialog(
@@ -817,8 +829,11 @@ run_hmm <- function(x, evalue = 0.001) {
     return(NULL)
   }
   msg("hmmscan successful")
-  # res <- parse_hmm_res(paste0("queries/", d, ".out"))
-  res <- parse_hmm_res_json(paste0("queries/", d, ".out"), evalue)
+  if (usePfamScan) {
+    res <- parse_hmm_res_json(paste0("queries/", d, ".out"), evalue)
+  } else {
+    res <- parse_hmm_res(paste0("queries/", d, ".out"))
+  }
   if (!nrow(res)) {
     showModal(modalDialog(
       title = "hmmscan", "Sorry, no domains were found."
@@ -832,11 +847,8 @@ run_hmm <- function(x, evalue = 0.001) {
 plot_domains <- function(x, qlen) {
   y <- data.frame(
     type = "DOMAIN",
-    # description = x[["target name"]],
     description = x$description,
-    # begin = x[["ali coord from"]],
     begin = x$seq_from,
-    # end = x[["ali coord to"]],
     end = x$seq_to,
     order = 1,
     entryName = "",
@@ -861,13 +873,10 @@ plot_domains <- function(x, qlen) {
     theme_bw(base_size = 20) +
     xlim(0, y$end[1]) +
     xlab(element_blank()) +
-    # scale_fill_discrete(name = element_blank()) +
     theme(
       legend.position = "none",
-      # legend.position = "bottom",
       panel.grid.minor = element_blank(),
       panel.grid.major = element_blank(),
-      # axis.ticks = element_blank(),
       axis.ticks.y = element_blank(),
       axis.text.y = element_blank(),
       panel.border = element_blank()
@@ -882,19 +891,13 @@ make_hmmscan_table <- function(res, domplot) {
   domcols <- ggplot_build(domplot)$data[[3]]$fill
   domnames <- res$name
   domacc <- res$acc
-  # domacc <- vapply(
-  #   strsplit(res[["accession"]], ".", TRUE),
-  #   function(x) x[1], character(1)
-  # )
   domfc <- DATA_ALL[domacc, "AF"]
   domfc[is.na(domfc)] <- 0
   domqval <- DATA_ALL[domacc, "AE"]
   out <- data.frame(
     fill = domcols,
     Name = domnames,
-    # Description = res[["description of target"]],
     Description = res$description,
-    # Evalue = res[["c-Evalue"]],
     Evalue = res$evalue,
     FoldChange = domfc,
     Qvalue = domqval,
@@ -909,11 +912,6 @@ make_hmmscan_table <- function(res, domplot) {
     character(1)
   )
   list(tab = out, cols = domcols)
-  # formattable(out,
-  #   list(
-  #     fill = color_tile(csscolor(out$fill))
-  #   )
-  # )
 }
 
 format_colours <- function(x) {

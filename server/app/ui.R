@@ -1,7 +1,7 @@
 #-------------------------------------------------------------------------------
 # VirFams v1.0
 # ui.R
-# Last modified: 2020-03-29 17:06:58 (CEST)
+# Last modified: 2020-03-29 17:38:40 (CEST)
 # BJM Tremblay
 
 msg("Loading ui.R")
@@ -47,7 +47,10 @@ ui <- function(request) fluidPage(
             numericInput(
               "HMMSCAN_EVALUE", "E-value:", 0.01, width = "90px"
             ),
-            actionLink("HMMSCAN_BUTTON", "Submit")
+            br(),
+            actionLink("HMMSCAN_BUTTON_STRICT", "Submit: Strict mode (PfamScan)"),
+            br(), br(),
+            actionLink("HMMSCAN_BUTTON_SENSITIVE", "Submit: Sensitive mode (hmmscan)")
           )
         ),
         column(2)
