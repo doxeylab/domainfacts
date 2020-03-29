@@ -1,7 +1,7 @@
 #-------------------------------------------------------------------------------
 # VirFams v1.0
 # server.R
-# Last modified: 2020-03-29 17:38:10 (CEST)
+# Last modified: 2020-03-29 18:26:07 (CEST)
 # BJM Tremblay
 
 msg("Loading server.R")
@@ -172,19 +172,12 @@ server <- function(input, output, session) {
 
   HmmScanRes <- reactiveValues(Res = NULL, Plot = NULL)
 
-  observeEvent(input$HMMSCAN_BUTTON_STRICT, {
+  observeEvent(input$HMMSCAN_BUTTON_SUBMIT, {
     req(input$HMMSCAN_INPUT)
-    res <- run_hmm(input$HMMSCAN_INPUT, input$HMMSCAN_EVALUE)
-    if (!is.null(res)) {
-      HmmScanRes$Res <- res
-      HmmScanRes$Plot <- plot_domains(res)
-      updateNavbarPage(session, "NAVBAR_PAGE", "HMMSCAN_TAB")
-    }
-  })
-
-  observeEvent(input$HMMSCAN_BUTTON_SENSITIVE, {
-    req(input$HMMSCAN_INPUT)
-    res <- run_hmm(input$HMMSCAN_INPUT, input$HMMSCAN_EVALUE, FALSE)
+    res <- run_hmm(
+      input$HMMSCAN_INPUT, input$HMMSCAN_EVALUE,
+      input$HMMSCAN_BUTTON_MODE == "Strict mode (PfamScan)"
+    )
     if (!is.null(res)) {
       HmmScanRes$Res <- res
       HmmScanRes$Plot <- plot_domains(res)
