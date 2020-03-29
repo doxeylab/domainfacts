@@ -1,7 +1,7 @@
 #-------------------------------------------------------------------------------
-# DomainFacts v1.0
+# VirFams v1.0
 # server.R
-# Last modified: 2020-03-28 22:08:14 (CET)
+# Last modified: 2020-03-29 11:41:19 (CEST)
 # BJM Tremblay
 
 msg("Loading server.R")
@@ -27,7 +27,7 @@ server <- function(input, output, session) {
   updateSelectizeInput(
     session,
     "SIDE_PANEL_INPUT_SEARCH",
-    choices = rownames(DATA_ALL),
+    choices = c(rownames(DATA_ALL), DATA_ALL$A),
     selected = "",
     server = TRUE,
     options = list(

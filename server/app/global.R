@@ -1,7 +1,7 @@
 #-------------------------------------------------------------------------------
-# DomainFacts v1.0
+# VirFams v1.0
 # global.R
-# Last modified: 2020-03-28 21:17:29 (CET)
+# Last modified: 2020-03-29 11:45:50 (CEST)
 # BJM Tremblay
 
 msg <- function(...) {
@@ -438,7 +438,7 @@ make_abundance_plot_1 <- function(x) {
     add_histogram(x = ~nondufs, name = "non-DUFs") %>%
     layout(
       barmode = "overlay",
-      xaxis = list(title = "log10(Proteins with domain)"),
+      xaxis = list(title = "log<sub>10</sub>(Proteins with domain)"),
       yaxis = list(title = "Abudance")
     )
   if (is.na(xline))
@@ -458,7 +458,7 @@ make_abundance_plot_2 <- function(x) {
     add_histogram(x = ~nondufs, name = "non-DUFs") %>%
     layout(
       barmode = "overlay",
-      xaxis = list(title = "log10(% species with domain)"),
+      xaxis = list(title = "log<sub>10</sub>(% species with domain)"),
       yaxis = list(title = "Abudance")
     )
   if (is.na(xline))
@@ -468,10 +468,14 @@ make_abundance_plot_2 <- function(x) {
 }
 
 make_lineage_plot <- function(x) {
+  # taxa = x, taxonomic level = W, highest F1 = AA
   dufs <- noNA(DATA_ALL$AA[DATA_ALL$D == "DUF"])
   nondufs <- noNA(DATA_ALL$AA[DATA_ALL$D == "non-DUF"])
   pall <- noNA(DATA_ALL$AA)
   xline <- DATA_ALL$AA[rownames(DATA_ALL) == x]
+  x_taxa <- DATA_ALL[x, "X"]
+  x_taxonomy <- DATA_ALL[x, "W"]
+  x_f1 <- DATA_ALL[x, "AA"]
   if (is.na(xline)) return(NULL)
   p <- plot_ly(alpha = 0.6) %>%
     add_histogram(x = ~pall, name = "All") %>%
@@ -480,8 +484,26 @@ make_lineage_plot <- function(x) {
     layout(
       barmode = "overlay",
       xaxis = list(title = "Highest F1 score"),
-      yaxis = list(title = "Abudance")
+      yaxis = list(title = "Abudance"),
+      title = list(
+        text = paste(
+          "Taxonomic level w/ highest F1 = ", x_taxonomy,
+          "\nTaxa w/ highest F1 = ", x_taxa,
+          "\nHighest F1 score = ", x_f1
+        ),
+      font = list(size = 12)
+      ),
+    margin = list(t = 60)
     )
+    # layout(
+    #   title = list(
+    #     text = paste(
+    #       "Fold change = ", fold_change,
+    #       "\nPathogen enrichment Q-value = ", q_val
+    #     ),
+    #     font = list(size = 12)
+    #   ),
+    #   margin = list(t = 60),
   if (is.na(xline))
     p
   else
