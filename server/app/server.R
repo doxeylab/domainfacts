@@ -1,7 +1,7 @@
 #-------------------------------------------------------------------------------
 # VirFams v1.0
 # server.R
-# Last modified: 2020-03-29 18:26:07 (CEST)
+# Last modified: 2020-03-29 19:41:41 (CEST)
 # BJM Tremblay
 
 msg("Loading server.R")
@@ -14,6 +14,8 @@ server <- function(input, output, session) {
 
   SelectedPFAM <- reactiveValues(Id = "PF06207", Success = NULL)
   SelectedFilter <- reactiveValues(Which = "BUTTON_ABUNDANCE")
+
+  LastPage <- reactiveValues(Which = NULL)
 
   output$SIDE_PANEL_INPUT_SEARCH_TEXT <- renderText({
     if (isTRUE(SelectedPFAM$Success))
@@ -57,6 +59,7 @@ server <- function(input, output, session) {
     req(what$value)
     if (what$col != 0) return()
     SelectedPFAM$Id <- what$value
+    LastPage$Which <- "SEARCH_TAB"
     updateNavbarPage(session, "NAVBAR_PAGE", "STATS_TAB")
   })
 
@@ -91,7 +94,12 @@ server <- function(input, output, session) {
     req(what$value)
     if (what$col != 0) return()
     SelectedPFAM$Id <- what$value
+    LastPage$Which <- "TABLE_TAB"
     updateNavbarPage(session, "NAVBAR_PAGE", "STATS_TAB")
+  })
+
+  observeEvent(input$BUTTON_GO_BACK, {
+    updateNavbarPage(session, "NAVBAR_PAGE", LastPage$Which)
   })
 
   output$DOWNLOAD_TABLE <- downloadHandler(

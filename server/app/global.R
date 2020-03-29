@@ -1,7 +1,7 @@
 #-------------------------------------------------------------------------------
 # VirFams v1.0
 # global.R
-# Last modified: 2020-03-29 17:42:17 (CEST)
+# Last modified: 2020-03-29 19:39:33 (CEST)
 # BJM Tremblay
 
 msg <- function(...) {
@@ -643,6 +643,7 @@ make_domain_info <- function(x) {
 make_domain_stats_tab <- function() {
   tagList(
     br(),
+    actionLink("BUTTON_GO_BACK", "Go back"),
     fluidRow(
       column(1),
       column(5,
