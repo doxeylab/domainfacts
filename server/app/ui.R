@@ -1,7 +1,7 @@
 #-------------------------------------------------------------------------------
 # VirFams v1.0
 # ui.R
-# Last modified: 2020-03-29 23:16:52 (CEST)
+# Last modified: 2020-03-29 23:52:43 (CEST)
 # BJM Tremblay
 
 msg("Loading ui.R")
@@ -46,6 +46,16 @@ ui <- function(request) fluidPage(
             ),
             numericInput(
               "HMMSCAN_EVALUE", "E-value:", 0.001, width = "90px"
+            ),
+            bsTooltip(
+              "HMMSCAN_EVALUE",
+              paste0(
+                "For hmmscan, the E-value is the value used by the --domE ",
+                "parameter.",
+                " For PfamScan, the E-value is used to filter the output based on ",
+                "the E-value column."
+              ),
+              "right", options = list(container = "body")
             ),
             radioButtons("HMMSCAN_BUTTON_MODE",
               "Mode:",

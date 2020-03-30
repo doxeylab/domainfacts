@@ -1,7 +1,7 @@
 #-------------------------------------------------------------------------------
 # VirFams v1.0
 # global.R
-# Last modified: 2020-03-29 19:39:33 (CEST)
+# Last modified: 2020-03-29 23:49:05 (CEST)
 # BJM Tremblay
 
 msg <- function(...) {
@@ -30,6 +30,8 @@ msg("  drawProteins")
 library(drawProteins)
 # msg("  formattable")
 # suppressPackageStartupMessages(library(formattable))
+msg("  shinyBS")
+library(shinyBS)
 
 #-------------------------------------------------------------------------------
 # Data - in memory
