@@ -1,7 +1,7 @@
 #-------------------------------------------------------------------------------
 # VirFams v1.0
 # global.R
-# Last modified: 2020-03-29 23:49:05 (CEST)
+# Last modified: 2020-05-14 19:59:55 (CEST)
 # BJM Tremblay
 
 msg <- function(...) {
@@ -837,7 +837,8 @@ run_hmm <- function(x, evalue = 0.001, usePfamScan = TRUE) {
   } else {
     res <- parse_hmm_res(paste0("queries/", d, ".out"))
   }
-  if (!nrow(res)) {
+  print(res)
+  if (is.null(res) || !nrow(res)) {
     showModal(modalDialog(
       title = "hmmscan", "Sorry, no domains were found."
     ))
