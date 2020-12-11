@@ -1,7 +1,7 @@
 #-------------------------------------------------------------------------------
 # VirFams v1.0
 # global.R
-# Last modified: 2020-05-14 19:59:55 (CEST)
+# Last modified: 2020-12-09 23:02:56 (CET)
 # BJM Tremblay
 
 msg <- function(...) {
@@ -907,8 +907,19 @@ make_hmmscan_table <- function(res, domplot) {
     Qvalue = domqval,
     stringsAsFactors = FALSE
   )
-  out <- out[!duplicated(out$fill), ]
-  rownames(out) <- domacc[!duplicated(domacc)]
+  # out <- out[!duplicated(out$fill), ]
+  # print(out)
+  # print(domacc[!duplicated(domacc)])
+  # rownames(out) <- domacc[!duplicated(domacc)]
+  # rownames(out) <- domacc
+  out$domacc <- domacc
+  out <- out[order(out$Evalue), ]
+  out <- out[!duplicated(out$domacc), ]
+  rownames(out) <- out$domacc
+  out <- out[, -ncol(out)]
+  # browser()
+  # print(out);stop()
+  # out <- out[!duplicated]
   domcols <- unname(vapply(out$fill, format_colours, character(1)))
   out$fill <- vapply(
     seq_len(nrow(out)),
