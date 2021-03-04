@@ -1,7 +1,7 @@
 #-------------------------------------------------------------------------------
 # VirFams v1.0
 # ui.R
-# Last modified: 2020-03-29 23:52:43 (CEST)
+# Last modified: 2021-03-04 23:57:30 (CET)
 # BJM Tremblay
 
 msg("Loading ui.R")
@@ -132,23 +132,23 @@ ui <- function(request) fluidPage(
       )),
       tags$h4("Additionally, all Pfam families were analyzed to predict:"),
       tags$h4(tags$ul(
-        tags$li("Co-occurring gene families across the tree of life using PhyloCorrelate[link] [bacterial families only]"),
+        # tags$li("Co-occurring gene families across the tree of life using PhyloCorrelate [bacterial families only]"),
+        HTML("<li>Co-occurring gene families across the bacterial tree of life using PhyloCorrelate [<a href=\"https://phylocorrelate.uwaterloo.ca\">link</a>]</li>"),
         tags$li("Feasibility for structure determination")
       )),
       tags$h4("For more information, please see our manuscript."),
       tags$h3("Citation"),
       tags$h4(tags$ul(
         tags$li("Lobb et al. VirFams: statistical analysis of protein domain families of unknown function using phylogenomic and metagenomic data. Forthcoming."),
-        tags$li("Tremblay et al. PhyloCorrelate: large-scale gene co-occurrence patterns accross the bacterial tree of life. Forthcoming.")
+        HTML("<li>Tremblay et al. (2021) PhyloCorrelate: inferring bacterial gene-gene functional associations through large-scale phylogenetic profiling. Bioinformatics, <a href=\"https://doi.org/10.1093/bioinformatics/btaa1105\">https://doi.org/10.1093/bioinformatics/btaa1105</a>.</li>")
+        # tags$li("Tremblay et al. (2021) PhyloCorrelate: inferring bacterial gene-gene functional associations through large-scale phylogenetic profiling. Bioinformatics, ")
       )),
       tags$h3("Team"),
       tags$h4(tags$ul(
         tags$li("Data analysis: Briallen Lobb"),
         tags$li("Developer: Benjamin Tremblay"),
         tags$li("PI: Andrew Doxey")
-      )),
-      tags$h3("Source data"),
-      tags$h4("Weblink to data")
+      ))
     )
 
 
