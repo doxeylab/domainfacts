@@ -113,6 +113,18 @@ server <- function(input, output, session) {
     }
   )
 
+  output$DOWNLOAD_ENTIRE_TABLE <- downloadHandler(
+    filename = "DataS3_table.tsv",
+    content = function(con) {
+      readr::write_tsv(make_domain_download(
+        SelectedFilter$Which,
+        !input$DOMAIN_TABLE_DUF_CHECKBOX,
+        !input$DOMAIN_TABLE_NONDUF_CHECKBOX,
+        TRUE
+      ), con)
+    }
+  )
+
   output$TAB_DOMAIN_STATS <- renderUI({
     make_domain_stats_tab()
   })
@@ -134,7 +146,8 @@ server <- function(input, output, session) {
   })
 
   output$ENVIRONMENT_PLOT <- renderPlotly({
-    ep <- make_environment_plot(SelectedPFAM$Id)
+    ep <- tryCatch(make_environment_plot(SelectedPFAM$Id),
+      error = function(e) NULL)
     validate(need(
       !is.null(ep),
       "Not detected in metagenomic samples."
@@ -162,6 +175,7 @@ server <- function(input, output, session) {
     req(what$value)
     if (what$col != 0) return()
     SelectedPFAM$Id <- what$value
+    LastPage$Which <- "HMMSCAN_TAB"
     updateNavbarPage(session, "NAVBAR_PAGE", "STATS_TAB")
   })
 
