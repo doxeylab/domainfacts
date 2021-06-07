@@ -237,8 +237,8 @@ make_col_container2 <- function(x) {
       class = "display",
       thead(tr(
         th(""),
-        th("PFAM ID"),
-        th("Type of PFAM entry"),
+        th("Pfam ID"),
+        th("Type of Pfam entry"),
         th("DUF status"),
         th("Avg abundance rank", title = "Average rank of column I (# of species in Pfam taxa ids (proteomes) with domain), column F (# of proteins with domain hits in NCBI sequence database), and column AG (Average of the normalized adjusted family size across all environmental samples)"),
         th("NCBI proteins w/ domain", title = "# of proteins with domain hits in NCBI sequence database"),
@@ -249,8 +249,8 @@ make_col_container2 <- function(x) {
       class = "display",
       thead(tr(
         th(""),
-        th("PFAM ID"),
-        th("Type of PFAM entry"),
+        th("Pfam ID"),
+        th("Type of Pfam entry"),
         th("DUF status"),
         th("Environment enrichment Q-value", title = "Adjusted (BH) p-value from the Kruskall-Wallis test - difference in the normalized adjusted family size in at least one environment"),
         th("Environment w/ highest abundance", title = "Environment with the highest average")
@@ -260,8 +260,8 @@ make_col_container2 <- function(x) {
       class = "display",
       thead(tr(
         th(""),
-        th("PFAM ID"),
-        th("Type of PFAM entry"),
+        th("Pfam ID"),
+        th("Type of Pfam entry"),
         th("DUF status"),
         th("Highest F1 score", title = "Highest F1 score (only compared to the most common taxa for each domain at each taxonomic level)"),
         th("Proteomes w/ domain", title = "# of Pfam taxa ids (proteomes) with this domain"),
@@ -273,8 +273,8 @@ make_col_container2 <- function(x) {
       class = "display",
       thead(tr(
         th(""),
-        th("PFAM ID"),
-        th("Type of PFAM entry"),
+        th("Pfam ID"),
+        th("Type of Pfam entry"),
         th("DUF status"),
         th("Fold change", title = "Fold change of the domain in pathogen bacterial Pfam taxa ids (proteomes) over non-pathogen bacterial Pfam taxa ids (proteomes)"),
         th("Pathogen enrichment Q-value", title = "Adjusted (BH) p-value from the hypergeometric test - enrichment of the domain in bacterial pathogens"),
@@ -285,8 +285,8 @@ make_col_container2 <- function(x) {
       class = "display",
       thead(tr(
         th(""),
-        th("PFAM ID"),
-        th("Type of PFAM entry"),
+        th("Pfam ID"),
+        th("Type of Pfam entry"),
         th("DUF status"),
         th("Fold change", title = "Fold change of the domain in pathogen bacterial Pfam taxa ids (proteomes) over non-pathogen bacterial Pfam taxa ids (proteomes)"),
         th("Precision of taxa w/ highest F1", title = "Precision of the taxa with the highest F1 score (only compared to the most common taxa for each domain at each taxonomic level)"),
@@ -299,8 +299,8 @@ make_col_container2 <- function(x) {
       class = "display",
       thead(tr(
         th(""),
-        th("PFAM ID"),
-        th("Type of PFAM entry"),
+        th("Pfam ID"),
+        th("Type of Pfam entry"),
         th("DUF status"),
         th("Most common superkingdom", title = "Most common superkingdom for each domain"),
         th("Pathogen enrichment Q-value", title = "Adjusted (BH) p-value from the hypergeometric test - enrichment of the domain in bacterial pathogens"),
@@ -311,8 +311,8 @@ make_col_container2 <- function(x) {
       class = "display",
       thead(tr(
         th(""),
-        th("PFAM ID"),
-        th("Type of PFAM entry"),
+        th("Pfam ID"),
+        th("Type of Pfam entry"),
         th("DUF status"),
         th("Fold change", title = "Fold change of the domain in pathogen bacterial Pfam taxa ids (proteomes) over non-pathogen bacterial Pfam taxa ids (proteomes)"),
         th("Pathogen enrichment Q-value", title = "Adjusted (BH) p-value from the hypergeometric test - enrichment of the domain in bacterial pathogens"),
@@ -324,8 +324,8 @@ make_col_container2 <- function(x) {
       class = "display",
       thead(tr(
           th(""),
-          th("PFAM ID"),
-          th("Type of PFAM entry"),
+          th("Pfam ID"),
+          th("Type of Pfam entry"),
           th("DUF status"),
           th("In PDB?", title = "Are there members of this family with structures in PDB?"),
           th("% Disorder", title = "Average % of disordered residues across the domain region for the domain family"),
@@ -336,100 +336,14 @@ make_col_container2 <- function(x) {
   )
 }
 
-make_col_container <- function(x) {
-  htmltools::withTags(table(
-    class = "display",
-    thead(
-      switch(x,
-        BUTTON_ABUNDANCE = thead(tr(
-          th(""),
-          th("PFAM ID"),
-          th("Type of PFAM entry"),
-          th("DUF status"),
-          th("Avg abundance rank", title = "Average rank of column I (# of species in Pfam taxa ids (proteomes) with domain), column F (# of proteins with domain hits in NCBI sequence database), and column AG (Average of the normalized adjusted family size across all environmental samples)"),
-          th("NCBI proteins w/ domain", title = "# of proteins with domain hits in NCBI sequence database"),
-          th("Metagenomic abundance", title = "Average of the normalized adjusted family size across all environmental samples")
-        )),
-        BUTTON_ENVIRONMENT = tr(
-          th(""),
-          th("PFAM ID"),
-          th("Type of PFAM entry"),
-          th("DUF status"),
-          th("Environment enrichment Q-value", title = "Adjusted (BH) p-value from the Kruskall-Wallis test - difference in the normalized adjusted family size in at least one environment"),
-          th("Environment w/ highest abundance", title = "Environment with the highest average")
-        ),
-        BUTTON_LINEAGE = tr(
-          th(""),
-          th("PFAM ID"),
-          th("Type of PFAM entry"),
-          th("DUF status"),
-          th("Highest F1 score", title = "Highest F1 score (only compared to the most common taxa for each domain at each taxonomic level)"),
-          th("Proteomes w/ domain", title = "# of Pfam taxa ids (proteomes) with this domain"),
-          th("Taxonomic level w/ highest F1 scores", title = "Taxonomic level with highest F1 score"),
-          th("Taxon w/ highest F1", title = "Taxa with highest F1 score (only compared to the most common taxa for each domain at each taxonomic level)")
-        ),
-        BUTTON_PATHOGEN = tr(
-          th(""),
-          th("PFAM ID"),
-          th("Type of PFAM entry"),
-          th("DUF status"),
-          th("Fold change", title = "Fold change of the domain in pathogen bacterial Pfam taxa ids (proteomes) over non-pathogen bacterial Pfam taxa ids (proteomes)"),
-          th("Pathogen enrichment Q-value", title = "Adjusted (BH) p-value from the hypergeometric test - enrichment of the domain in bacterial pathogens"),
-          th("Pathogen frequency", title = "# of bacterial pathogen Pfam taxa ids (proteomes) containing this domain")
-        ),
-        BUTTON_BROAD_PATHOGEN = tr(
-          th(""),
-          th("PFAM ID"),
-          th("Type of PFAM entry"),
-          th("DUF status"),
-          th("Fold change", title = "Fold change of the domain in pathogen bacterial Pfam taxa ids (proteomes) over non-pathogen bacterial Pfam taxa ids (proteomes)"),
-          th("Precision of taxa w/ highest F1", title = "Precision of the taxa with the highest F1 score (only compared to the most common taxa for each domain at each taxonomic level)"),
-          th("Taxon w/ highest F1", title = "Taxa with highest F1 score (only compared to the most common taxa for each domain at each taxonomic level)"),
-          th("Taxonomic level", title = "Taxonomic level with highest F1 score"),
-          th("Pathogen enrichment Q-value", title = "Adjusted (BH) p-value from the hypergeometric test - enrichment of the domain in bacterial pathogens")
-        ),
-        BUTTON_MIMICRY = tr(
-          th(""),
-          th("PFAM ID"),
-          th("Type of PFAM entry"),
-          th("DUF status"),
-          th("Most common superkingdom", title = "Most common superkingdom for each domain"),
-          th("Pathogen enrichment Q-value", title = "Adjusted (BH) p-value from the hypergeometric test - enrichment of the domain in bacterial pathogens"),
-          th("Fold change", title = "Fold change of the domain in pathogen bacterial Pfam taxa ids (proteomes) over non-pathogen bacterial Pfam taxa ids (proteomes)")
-        ),
-        BUTTON_GUT = tr(
-          th(""),
-          th("PFAM ID"),
-          th("Type of PFAM entry"),
-          th("DUF status"),
-          th("Fold change", title = "Fold change of the domain in pathogen bacterial Pfam taxa ids (proteomes) over non-pathogen bacterial Pfam taxa ids (proteomes)"),
-          th("Pathogen enrichment Q-value", title = "Adjusted (BH) p-value from the hypergeometric test - enrichment of the domain in bacterial pathogens"),
-          th("Environment w/ highest abundance", title = "Environment with the highest average"),
-          th("Environment enrichment Q-value", title = "Adjusted (BH) p-value from the Kruskall-Wallis test - difference in the normalized adjusted family size in at least one environment")
-        ),
-        BUTTON_STRUCTURAL = tr(
-          th(""),
-          th("PFAM ID"),
-          th("Type of PFAM entry"),
-          th("DUF status"),
-          th("In PDB?", title = "Are there members of this family with structures in PDB?"),
-          th("% Disorder", title = "Average % of disordered residues across the domain region for the domain family"),
-          th("% With TM in domain", title = "% of family members whose domains have a predicted transmembrane region overlapping them"),
-          th("% With TM in protein", title = "% of family members whose proteins have a transmembrane region predicted")
-        )
-      )
-    )
-  ))
-}
-
 make_domain_download <- function(x, hideDUFs = FALSE, hideNonDUFs = TRUE, returnAll = FALSE) {
   # print(x)
   x <- filter_table(x, hideDUFs, hideNonDUFs, returnAll)
   # print(x)
   # print(ncol(x))
   colnames(x) <- NAMES_OLD[colnames(x)]
-  colnames(x)[colnames(x) == "Domain"] <- "PFAM ID"
-  cbind("PFAM Accession" = rownames(x), x)
+  colnames(x)[colnames(x) == "Domain"] <- "Pfam ID"
+  cbind("Pfam Accession" = rownames(x), x)
 }
 
 make_pmf_table <- function(x) {
@@ -473,11 +387,11 @@ make_domain_table_tab <- function(x) {
         label = "Show DUFs",
         value = TRUE
       ),
-      "Click on a PFAM accession to view domain stats. Hover over column names for more details.",
+      "Click on a Pfam accession to view domain stats. Hover over column names for more details.",
       br(),
-      downloadLink("DOWNLOAD_TABLE", "Click to download the table as a TSV file."),
+      downloadLink("DOWNLOAD_TABLE", "Click to download the filtered table as a TSV file."),
       br(),
-      downloadLink("DOWNLOAD_ENTIRE_TABLE", "Click to download the entire dataset (Data S3) as a TSV file."),
+      downloadLink("DOWNLOAD_ENTIRE_TABLE", "Click to download the entire dataset as a TSV file."),
       br(), br(),
       DT::dataTableOutput("DOMAIN_TABLE")
     )
@@ -739,7 +653,7 @@ make_domain_info <- function(x) {
     "  <p><B>Status:</B> ", y$Status, "</p>\n",
     "  <p><B>Links:</B> ",
     "<a href=https://pfam.xfam.org/family/", x,
-    " target=_blank>PFAM</a> <a ",
+    " target=_blank>Pfam</a> <a ",
     "href=http://annotree.uwaterloo.ca/app/#/?qtype=pfam&qstring=", x,
     "&eval=0.00001 target=_blank>AnnoTree</a>",
     if (x %in% PFAMsWithPMFs) {
@@ -767,7 +681,7 @@ make_domain_stats_tab <- function() {
         ),
         wellPanel(
           tags$h3("Top co-occurring protein families from PhyloCorrelate"),
-          "Click on a PFAM accession to load it.",
+          "Click on a Pfam accession to load it.",
           DT::dataTableOutput("PMF_TABLE")
         )
       ),
@@ -1067,7 +981,7 @@ make_hmmscan_tab <- function() {
     column(8, wellPanel(
       plotOutput("HMMSCAN_PLOT", height = "100px", width = "100%"),
       br(),
-      tags$em("Click on a PFAM accession to go to the stats page."),
+      tags$em("Click on a Pfam accession to go to the stats page."),
       DT::dataTableOutput("HMMSCAN_TABLE")
     )),
     column(2)

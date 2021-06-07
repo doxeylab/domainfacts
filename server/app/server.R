@@ -19,7 +19,7 @@ server <- function(input, output, session) {
 
   output$SIDE_PANEL_INPUT_SEARCH_TEXT <- renderText({
     if (isTRUE(SelectedPFAM$Success))
-      "Click on a PFAM ID to view domain stats."
+      "Click on a Pfam ID to view domain stats."
     else if (isFALSE(SelectedPFAM$Success))
       "No results, try again."
     else
@@ -187,7 +187,7 @@ server <- function(input, output, session) {
     x <- PFAMBestPMF(SelectedPFAM$Id)
     validate(need(
       nrow(x) > 0,
-      "Could not find any PFAMs with probable matching function."
+      "Could not find any Pfams with probable matching function."
     ))
     make_pmf_table(x)
   })
