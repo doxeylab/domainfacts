@@ -19,7 +19,7 @@ server <- function(input, output, session) {
 
   output$SIDE_PANEL_INPUT_SEARCH_TEXT <- renderText({
     if (isTRUE(SelectedPFAM$Success))
-      "Click on a Pfam ID to view domain stats."
+      "Click on a Pfam accession to view domain stats."
     else if (isFALSE(SelectedPFAM$Success))
       "No results, try again."
     else
@@ -83,6 +83,7 @@ server <- function(input, output, session) {
     req(input$DOMAIN_RANKINGS_DROPDOWN)
     SelectedFilter$Which <- input$DOMAIN_RANKINGS_DROPDOWN
     updateNavbarPage(session, "NAVBAR_PAGE", "TABLE_TAB")
+    LastPage$Which <- "SEARCH_TAB"
     updateSelectInput(
       session, "DOMAIN_RANKINGS_DROPDOWN",
       selected = c(Choose = "")
@@ -98,7 +99,18 @@ server <- function(input, output, session) {
     updateNavbarPage(session, "NAVBAR_PAGE", "STATS_TAB")
   })
 
-  observeEvent(input$BUTTON_GO_BACK, {
+  observeEvent(input$BUTTON_HOME1, {
+    "BUTTON_HOME1"
+    updateNavbarPage(session, "NAVBAR_PAGE", "SEARCH_TAB")
+  })
+
+  observeEvent(input$BUTTON_HOME2, {
+    "BUTTON_HOME2"
+    updateNavbarPage(session, "NAVBAR_PAGE", "SEARCH_TAB")
+  })
+
+  observeEvent(input$BUTTON_GO_BACK1, {
+    "BUTTON_GO_BACK1"
     updateNavbarPage(session, "NAVBAR_PAGE", LastPage$Which)
   })
 
@@ -122,6 +134,15 @@ server <- function(input, output, session) {
         !input$DOMAIN_TABLE_NONDUF_CHECKBOX,
         TRUE
       ), con)
+    }
+  )
+
+  output$DOWNLOAD_ENTIRE_TABLE2 <- downloadHandler(
+    filename = "DataS3_table.tsv",
+    content = function(con) {
+      readr::write_tsv(
+        suppressMessages(readr::read_csv("data/Entire_table.csv"))
+      , con)
     }
   )
 
@@ -196,6 +217,7 @@ server <- function(input, output, session) {
 
   observeEvent(input$HMMSCAN_BUTTON_SUBMIT, {
     req(input$HMMSCAN_INPUT)
+    LastPage$Which <- "SEARCH_TAB"
     res <- run_hmm(
       input$HMMSCAN_INPUT, input$HMMSCAN_EVALUE,
       input$HMMSCAN_BUTTON_MODE == "Strict mode (PfamScan)"

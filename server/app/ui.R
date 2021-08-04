@@ -100,7 +100,8 @@ ui <- function(request) fluidPage(
                 "Structural characterization feasibility" = "BUTTON_STRUCTURAL"
               ),
               selectize = FALSE
-            )
+            ),
+            downloadLink("DOWNLOAD_ENTIRE_TABLE2", "Or download the entire table.")
           )
         ),
         column(2)

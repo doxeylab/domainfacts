@@ -141,6 +141,18 @@ searchPFAMs <- function(x, hideNonDUFs = TRUE, hideDUFs = FALSE) {
   res
 }
 
+make_table_name <- function(filter, hideNonDUFs, hideDUFs) {
+  out <- "DataS3_table_"
+  out <- paste0(out, "_", gsub("BUTTON_", "", filter))
+  if (hideNonDUFs && !hideDUFs)
+    out <- paste0(out, "_NonDUFs.tsv")
+  else if (!hideNonDUFs && hideDUFs)
+    out <- paste0(out, "_DUFs.tsv")
+  else if (!hideNonDUFs && !hideDUFs)
+    out <- paste0(out, ".tsv")
+  out
+}
+
 make_search_table <- function(x) {
   if (is.null(x)) return()
   DT::datatable(x,
@@ -375,6 +387,8 @@ make_domain_table <- function(x, hideDUFs = FALSE, hideNonDUFs = TRUE) {
 
 make_domain_table_tab <- function(x) {
   tagList(
+    actionLink("BUTTON_HOME1", "Previous page"),
+    br(), br(),
     wellPanel(
       tags$h4(paste("Selected preset filter:", x)),
       checkboxInput(
@@ -389,7 +403,7 @@ make_domain_table_tab <- function(x) {
       ),
       "Click on a Pfam accession to view domain stats. Hover over column names for more details.",
       br(),
-      downloadLink("DOWNLOAD_TABLE", "Click to download the filtered table as a TSV file."),
+      downloadLink("DOWNLOAD_TABLE", "Click to download this table as a TSV file."),
       br(),
       downloadLink("DOWNLOAD_ENTIRE_TABLE", "Click to download the entire dataset as a TSV file."),
       br(), br(),
@@ -671,7 +685,8 @@ make_domain_info <- function(x) {
 make_domain_stats_tab <- function() {
   tagList(
     br(),
-    actionLink("BUTTON_GO_BACK", "Go back"),
+    actionLink("BUTTON_GO_BACK1", "Previous page"),
+    br(), br(),
     fluidRow(
       column(1),
       column(5,
@@ -977,6 +992,8 @@ hmmscan_table_cols <- htmltools::withTags(table(
 
 make_hmmscan_tab <- function() {
   tagList(
+    actionLink("BUTTON_HOME2", "Previous page"),
+    br(), br(),
     column(2),
     column(8, wellPanel(
       plotOutput("HMMSCAN_PLOT", height = "100px", width = "100%"),
