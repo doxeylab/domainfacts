@@ -74,7 +74,7 @@ ui <- function(request) fluidPage(
             tags$h4("Explore individual Pfam domains in terms of pathogen-association and other statistics."),
             selectizeInput(
               "SIDE_PANEL_INPUT_SEARCH",
-              "Keyword search",
+              "Keyword search (e.g. \"PF17323\" or \"ToxS\")",
               choices = NULL
             ),
             textOutput("SIDE_PANEL_INPUT_SEARCH_TEXT"),

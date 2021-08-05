@@ -16,6 +16,7 @@ server <- function(input, output, session) {
   SelectedFilter <- reactiveValues(Which = "BUTTON_ABUNDANCE")
 
   LastPage <- reactiveValues(Which = NULL)
+  CurrentHMMTable <- reactiveValues(Table = NULL)
 
   output$SIDE_PANEL_INPUT_SEARCH_TEXT <- renderText({
     if (isTRUE(SelectedPFAM$Success))
@@ -194,8 +195,9 @@ server <- function(input, output, session) {
   observeEvent(input$HMMSCAN_TABLE_cell_clicked, {
     what <- input$HMMSCAN_TABLE_cell_clicked
     req(what$value)
-    if (what$col != 0) return()
-    SelectedPFAM$Id <- what$value
+    # if (what$col != 0) return()
+    # SelectedPFAM$Id <- what$value
+    SelectedPFAM$Id <- rownames(CurrentHMMTable$Table$tab)[what$row]
     LastPage$Which <- "HMMSCAN_TAB"
     updateNavbarPage(session, "NAVBAR_PAGE", "STATS_TAB")
   })
@@ -241,6 +243,7 @@ server <- function(input, output, session) {
   output$HMMSCAN_TABLE <- DT::renderDataTable({
     req(HmmScanRes$Res)
     out <- make_hmmscan_table(HmmScanRes$Res, HmmScanRes$Plot)
+    CurrentHMMTable$Table <- out
     DT::datatable(
       out$tab,
       escape = FALSE,
