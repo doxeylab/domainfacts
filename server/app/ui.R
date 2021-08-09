@@ -1,5 +1,5 @@
 #-------------------------------------------------------------------------------
-# VirFams v1.0
+# PathFams v1.0
 # ui.R
 # Last modified: 2021-03-04 23:57:30 (CET)
 # BJM Tremblay
@@ -9,7 +9,7 @@ ui <- function(request) fluidPage(
 
   theme = shinytheme("lumen"),
 
-  title = "VirFams",
+  title = "PathFams",
 
   br(), br(), br(),
 
@@ -21,7 +21,7 @@ ui <- function(request) fluidPage(
     title = div(
       img(src = "logo2.png", height = 53, width = 50),
       HTML(" &nbsp;&nbsp; "),
-      HTML("<a id=\"HOMEPAGE\" href=\"#\" class=\"action-button\" style=\"color:#000000\">VirFams</a>")
+      HTML("<a id=\"HOMEPAGE\" href=\"#\" class=\"action-button\" style=\"color:#000000\">PathFams</a>")
     ),
     id = "NAVBAR_PAGE",
     position = "fixed-top",
@@ -124,7 +124,7 @@ ui <- function(request) fluidPage(
 
     tabPanel(div(img(src="logo2.png", height = 53, width = 0), "About"),
       tags$h2("About"),
-      tags$h4("VirFams is a database of pre-computed analyses of Pfam domain families. The abundance of all 17,929 families in Pfam v. 32.0 was examined in:"),
+      tags$h4("PathFams is a database of pre-computed analyses of Pfam domain families. The abundance of all 17,929 families in Pfam v. 32.0 was examined in:"),
       tags$h4(tags$ul(
         tags$li("Bioinformatic databases"),
         tags$li("Environments (human gut, marine, soil)"),
@@ -140,7 +140,7 @@ ui <- function(request) fluidPage(
       tags$h4("For more information, please see our manuscript."),
       tags$h3("Citation"),
       tags$h4(tags$ul(
-        tags$li("Lobb et al. VirFams: statistical analysis of protein domain families of unknown function using phylogenomic and metagenomic data. Forthcoming."),
+        tags$li("Lobb et al. PathFams: statistical analysis of protein domain families of unknown function using phylogenomic and metagenomic data. Forthcoming."),
         HTML("<li>Tremblay et al. (2021) PhyloCorrelate: inferring bacterial gene-gene functional associations through large-scale phylogenetic profiling. Bioinformatics, <a href=\"https://doi.org/10.1093/bioinformatics/btaa1105\">https://doi.org/10.1093/bioinformatics/btaa1105</a>.</li>")
         # tags$li("Tremblay et al. (2021) PhyloCorrelate: inferring bacterial gene-gene functional associations through large-scale phylogenetic profiling. Bioinformatics, ")
       )),
