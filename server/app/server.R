@@ -127,23 +127,32 @@ server <- function(input, output, session) {
   )
 
   output$DOWNLOAD_ENTIRE_TABLE <- downloadHandler(
-    filename = "DataS3_table.tsv",
+    filename = "FullDataset.xlsx",
     content = function(con) {
-      readr::write_tsv(make_domain_download(
-        SelectedFilter$Which,
-        !input$DOMAIN_TABLE_DUF_CHECKBOX,
-        !input$DOMAIN_TABLE_NONDUF_CHECKBOX,
-        TRUE
-      ), con)
+      openxlsx::saveWorkbook(wb, con)
+      # openxlsx::write.xlsx(FULL_DATASET_XLSX, con)
+      # readr::write_tsv(
+      #   suppressMessages(readr::read_csv("data/Entire_table.csv"))
+      # , con)
     }
+    # content = function(con) {
+    #   readr::write_tsv(make_domain_download(
+    #     SelectedFilter$Which,
+    #     !input$DOMAIN_TABLE_DUF_CHECKBOX,
+    #     !input$DOMAIN_TABLE_NONDUF_CHECKBOX,
+    #     TRUE
+    #   ), con)
+    # }
   )
 
   output$DOWNLOAD_ENTIRE_TABLE2 <- downloadHandler(
-    filename = "DataS3_table.tsv",
+    filename = "FullDataset.xlsx",
     content = function(con) {
-      readr::write_tsv(
-        suppressMessages(readr::read_csv("data/Entire_table.csv"))
-      , con)
+      openxlsx::saveWorkbook(wb, con)
+      # openxlsx::write.xlsx(FULL_DATASET_XLSX, con)
+      # readr::write_tsv(
+      #   suppressMessages(readr::read_csv("data/Entire_table.csv"))
+      # , con)
     }
   )
 
@@ -254,7 +263,7 @@ server <- function(input, output, session) {
         ordering = FALSE
       )
     ) %>%
-      formatStyle(0, cursor = "pointer") %>%
+      formatStyle(0:6, cursor = "pointer") %>%
       formatStyle(
         "FoldChange",
         background = styleColorBar(

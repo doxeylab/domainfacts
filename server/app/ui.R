@@ -79,6 +79,13 @@ ui <- function(request) fluidPage(
             ),
             textOutput("SIDE_PANEL_INPUT_SEARCH_TEXT"),
             DT::dataTableOutput("SIDE_PANEL_INPUT_SEARCH_TABLE")
+          ),
+          wellPanel(
+            tags$h3("Full dataset"),
+            tags$h4("Download link for the collated information on all the domain families."),
+            "Visualizations and rankings of this data in the Domain database section and Domain rankings section, respectively, above).",
+            br(), br(),
+            downloadLink("DOWNLOAD_ENTIRE_TABLE2", "Full dataset")
           )
         ),
         column(4,
@@ -100,8 +107,7 @@ ui <- function(request) fluidPage(
                 "Structural characterization feasibility" = "BUTTON_STRUCTURAL"
               ),
               selectize = FALSE
-            ),
-            downloadLink("DOWNLOAD_ENTIRE_TABLE2", "Or download the entire table.")
+            )
           )
         ),
         column(2)
@@ -137,11 +143,22 @@ ui <- function(request) fluidPage(
         HTML("<li>Co-occurring gene families across the bacterial tree of life using PhyloCorrelate [<a href=\"https://phylocorrelate.uwaterloo.ca\">link</a>]</li>"),
         tags$li("Feasibility for structure determination")
       )),
+      tags$br(),
+      tags$h4("The results of the above analyses and other collected information about the domain families (not including Phylocorrelate data) is available to browse in several different ways:"),
+      tags$h4(tags$b("Sequence input")),
+      tags$h4("The sequence input section performs a domain search on your protein sequence query, and displays pathogen-association statistics for each domain match. The displayed domain matches also link to their individual pages in the Domain database (see below)."),
+      tags$h4(tags$b("Domain database")),
+      tags$h4("Each page in this section contains visualizations of the data for a single domain family from the various analyses listed above, and how their rankings and statistics in the various categories compare to the other domain families."),
+      tags$h4(tags$b("Domain rankings")),
+      tags$h4("Here there is a selection of eight different lists based on filtering and ranking the collected domain information. Each list is displayed with only pertinent columns but the full dataset is available to download at the top of every list page, and on the main page of the website (see below)."),
+      tags$h4(tags$b("Full dataset")),
+      tags$h4("This section only contains a download link to the full dataset that is used for the Domain database and the Domain rankings. It is a copy of Supplemental Data S3 from our manuscript."),
+      tags$br(),
       tags$h4("For more information, please see our manuscript."),
       tags$h3("Citation"),
       tags$h4(tags$ul(
-        tags$li("Lobb et al. PathFams: statistical analysis of protein domain families of unknown function using phylogenomic and metagenomic data. Forthcoming."),
-        HTML("<li>Tremblay et al. (2021) PhyloCorrelate: inferring bacterial gene-gene functional associations through large-scale phylogenetic profiling. Bioinformatics, <a href=\"https://doi.org/10.1093/bioinformatics/btaa1105\">https://doi.org/10.1093/bioinformatics/btaa1105</a>.</li>")
+        tags$li("Lobb B, Tremblay BJ, Moreno-Hagelsieb G, Doxey AC. PathFams: statistical detection of pathogen-associated protein domains. Forthcoming."),
+        HTML("<li>Tremblay BJ, Lobb B, Doxey AC. PhyloCorrelate: inferring bacterial gene-gene functional associations through large-scale phylogenetic profiling. Bioinformatics. 2021;37(1):17-22. <a href=\"https://doi.org/10.1093/bioinformatics/btaa1105\">https://doi.org/10.1093/bioinformatics/btaa1105</a>.</li>")
         # tags$li("Tremblay et al. (2021) PhyloCorrelate: inferring bacterial gene-gene functional associations through large-scale phylogenetic profiling. Bioinformatics, ")
       )),
       tags$h3("Team"),

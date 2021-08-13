@@ -32,11 +32,53 @@ library(drawProteins)
 # suppressPackageStartupMessages(library(formattable))
 msg("  shinyBS")
 library(shinyBS)
+msg("  openxlsx")
+library(openxlsx)
 
 #-------------------------------------------------------------------------------
 # Data - in memory
 
 msg("Loading data")
+
+FULL_DATASET_XLSX <- list(
+  "Intro to Full Dataset" = openxlsx::read.xlsx("data/Full dataset.xlsx", 1, skipEmptyRows = FALSE, skipEmptyCols = FALSE, check.names = FALSE, sep.names = " "),
+  "Full Dataset" = openxlsx::read.xlsx("data/Full dataset.xlsx", 2, skipEmptyRows = FALSE, skipEmptyCols = FALSE, check.names = FALSE, sep.names = " ")
+)
+colnames(FULL_DATASET_XLSX[[1]])[2] <- ""
+
+wb <- createWorkbook()
+addWorksheet(wb, "Intro to Full Dataset")
+addWorksheet(wb, "Full Dataset")
+bold_s <- createStyle(textDecoration = "Bold")
+writeData(wb, 1, FULL_DATASET_XLSX[[1]], headerStyle = bold_s)
+writeData(wb, 2, FULL_DATASET_XLSX[[2]], headerStyle = bold_s)
+mergeCells(wb, 1, cols = 1:10, rows = 1)
+setColWidths(wb, 1, cols = 1, widths = 50)
+setColWidths(wb, 2, cols = 1:43, widths = 15)
+addStyle(wb, 1, style = bold_s, cols = 1, rows = 2:21)
+
+addStyle(wb, 1, style = createStyle(fgFill = "#EFEFEF", textDecoration = "Bold"), cols = 1, rows = 4)
+addStyle(wb, 2, style = createStyle(fgFill = "#EFEFEF", textDecoration = "Bold"), cols = 5:8, rows = 1)
+
+addStyle(wb, 1, style = createStyle(fgFill = "#45818E", textDecoration = "Bold"), cols = 1, rows = 5)
+addStyle(wb, 2, style = createStyle(fgFill = "#45818E", textDecoration = "Bold"), cols = 9:16, rows = 1)
+
+addStyle(wb, 1, style = createStyle(fgFill = "#6AA84F", textDecoration = "Bold"), cols = 1, rows = 6)
+addStyle(wb, 2, style = createStyle(fgFill = "#6AA84F", textDecoration = "Bold"), cols = 17:22, rows = 1)
+
+addStyle(wb, 1, style = createStyle(fgFill = "#6FA8DC", textDecoration = "Bold"), cols = 1, rows = 7)
+addStyle(wb, 2, style = createStyle(fgFill = "#6FA8DC", textDecoration = "Bold"), cols = 23:28, rows = 1)
+
+addStyle(wb, 1, style = createStyle(fgFill = "#DD7E6B", textDecoration = "Bold"), cols = 1, rows = 8)
+addStyle(wb, 2, style = createStyle(fgFill = "#DD7E6B", textDecoration = "Bold"), cols = 29:32, rows = 1)
+
+addStyle(wb, 1, style = createStyle(fgFill = "#F1C232", textDecoration = "Bold"), cols = 1, rows = 9)
+addStyle(wb, 2, style = createStyle(fgFill = "#F1C232", textDecoration = "Bold"), cols = 33:41, rows = 1)
+
+addStyle(wb, 1, style = createStyle(fgFill = "#000000", fontColour = "white", textDecoration = "Bold"), cols = 1, rows = 10)
+addStyle(wb, 2, style = createStyle(fgFill = "#000000", fontColour = "white", textDecoration = "Bold"), cols = 42:43, rows = 1)
+
+freezePane(wb, 2, firstActiveCol = 3)
 
 DATA_ALL <- fst::read_fst("data/all.fst")
 NAMES_OLD <- colnames(DATA_ALL)
@@ -405,7 +447,7 @@ make_domain_table_tab <- function(x) {
       br(),
       downloadLink("DOWNLOAD_TABLE", "Click to download this table as a TSV file."),
       br(),
-      downloadLink("DOWNLOAD_ENTIRE_TABLE", "Click to download the entire dataset as a TSV file."),
+      downloadLink("DOWNLOAD_ENTIRE_TABLE", "Click to download the entire dataset as a xlsx file."),
       br(), br(),
       DT::dataTableOutput("DOMAIN_TABLE")
     )
